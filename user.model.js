@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const Schema = mongoose.Schema;
 
@@ -34,7 +35,7 @@ const customerSchema = new Schema({
     countryCode: String,
     phoneNumber: String,
   },
-  user_image: { type: String, required: false }, // accepts base64 images
+  userImage: { type: String, required: false }, // accepts base64 images
   creditCard: { type: String, required: false }, // this dummy for now
   follows: [
     {
