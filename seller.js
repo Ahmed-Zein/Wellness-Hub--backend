@@ -1,22 +1,22 @@
 const mongoose = require("mongoose");
 
 const sellerSchema = new mongoose.Schema({
-    Name: {
+    name: {
         type: String,
         required: true,
     },
-    Phone: {
+    phone: {
         type:String,
         minLength:11,
         maxLength:11,
         required: true,
     },
-    Email: {
+    email: {
         type: String,
         unique: true,
         required: true,
     },
-    Password: {
+    password: {
        type: String,
        required: true,
     },
@@ -29,16 +29,16 @@ const sellerSchema = new mongoose.Schema({
         minLength: 14,
         maxLength: 14,
     },
-    CreatedAt: {
+    createdAt: {
         type: Date,
         default: () => Date.now(),
         immutable: true,
     },
-    UpdatedAt: {
+    updatedAt: {
         type: Date,
         default: () => Date.now(),
     },
-    Tags: {
+    tags: {
         type:[String],
         required: true,
     },
