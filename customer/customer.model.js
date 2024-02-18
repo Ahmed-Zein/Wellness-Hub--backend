@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const Schema = mongoose.Schema;
 
@@ -20,10 +20,10 @@ const customerSchema = new Schema({
   password: {
     type: String,
     required: true,
-    minlength: [8, "Password must be at least 8 characters long"],
-    set: function (password) {
-      return bcrypt.hashSync(password, 10); // 10 is the saltRounds parameter
-    },
+    // minlength: [8, "Password must be at least 8 characters long"],
+    // set: function (password) {
+    //   return bcrypt.hashSync(password, 10); // 10 is the saltRounds parameter
+    // },
   },
   address: {
     type: String,
@@ -31,11 +31,16 @@ const customerSchema = new Schema({
     trim: true,
   },
   phone: {
-    required: true,
-    countryCode: String,
-    phoneNumber: String,
+    countryCode: {
+      type: String,
+      required: true
   },
-  userImage: { type: String, required: false }, // accepts base64 images
+  number: {
+      type: String,
+      required: true
+  }
+  },
+  // userImage: { type: String, required: false }, // accepts base64 images
   creditCard: { type: String, required: false }, // this dummy for now
   follows: [
     {

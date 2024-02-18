@@ -26,7 +26,7 @@ const sellerSchema = new mongoose.Schema({
     },
   },
   creditCard: String, // dummy data
-  userImage: String,
+  // userImage: String,
   SSN: {
     type: String,
     required: true,
