@@ -14,6 +14,9 @@ app.disable("x-powered-by");
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.get("/", (req, res) => {
+  res.send("hell world");
+});
 
 mongoose.connect(process.env.mongoUri).then((result) => {
   app.listen(3000, () => {
