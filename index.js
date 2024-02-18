@@ -15,7 +15,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.get("/", (req, res) => {
-  res.send("hell world");
+  res.send("Test test");
 });
 
 mongoose.connect(process.env.mongoUri).then((result) => {
