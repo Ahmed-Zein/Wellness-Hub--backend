@@ -81,7 +81,7 @@ exports.login = async (req, res) => {
     );
   }
 
-  await new UserToken({ userId: customer._id, token: refreshToken }).save();
+  const token= await new UserToken({ userId: customer._id, token: refreshToken }).save();
 
   res.send({
     message: "success",

@@ -16,9 +16,9 @@ exports.authenticateToken = (req, res, next) => {
   if (token == null) return res.sendStatus(401);
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    console.log(err);
+    console.log("jwt error: " + err);
 
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(403).end();
 
     req.user = user;
 

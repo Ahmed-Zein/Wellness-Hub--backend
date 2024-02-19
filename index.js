@@ -20,12 +20,19 @@ app.get("/", (req, res) => {
   res.send("Test test");
 });
 
-app.use("/api/v1/customer", customerRoute);
+app.use("/api/v1/customer", logg, customerRoute);
 app.use("/api/v1/seller", sellerRoute);
+app.use((err, req, res, next) => {
+  res.send(err);
+});
 
 const port = process.env.PORT || 3000;
 mongoose.connect(process.env.MONGO_URI).then((result) => {
   app.listen(port, () => {
-    console.log(">> server started on port:"+ port);
+    console.log(">> server started on port:" + port);
   });
 });
+
+const logg = (req, res) => {
+  console.log(req);
+};
