@@ -23,9 +23,9 @@ app.get("/", (req, res) => {
 app.use("/api/v1/customer", customerRoute);
 app.use("/api/v1/seller", sellerRoute);
 
-
+const port = process.env.PORT || 3000;
 mongoose.connect(process.env.MONGO_URI).then((result) => {
-  app.listen(process.env.PORT || 3000, () => {
-    console.log(">> server started");
+  app.listen(port, () => {
+    console.log(">> server started on port:"+ port);
   });
 });
