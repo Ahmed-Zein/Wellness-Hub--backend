@@ -3,8 +3,18 @@ const jwt = require("jsonwebtoken");
 
 const Customer = require("./customer.model");
 const UserToken = require("../models/user.token.model");
-const { authenticateToken, generateAccessToken } = require("../utils");
+const { generateAccessToken } = require("../utils");
 
+/**
+ @api {post} /api/v1/customer register new user
+ @apiName Register new Customer 
+ @apiGroup Customer
+ @apiParam  {String} [name] 
+ @apiParam  {String} [email] Email
+ @apiParam  {String} [phone] Phone number
+ @apiParam  {String} [address] optional
+ @apiSuccess (200) {Object} mixed `User` object
+*/
 exports.register = async (req, res) => {
   const { name, email, password, phone, address } = req.body;
 
@@ -72,7 +82,9 @@ exports.login = async (req, res) => {
     process.env.TOKEN_SECRET
   );
 
-  let refreshToken = await UserToken.findOne({ userId: customer._id });
+  let refreshToken = await UserToken.findOne({ userId: customer._id }).select(
+    "token"
+  );
   if (!refreshToken) {
     refreshToken = generateAccessToken(
       { _id: customer._id },
@@ -81,11 +93,15 @@ exports.login = async (req, res) => {
     );
   }
 
-  const token= await new UserToken({ userId: customer._id, token: refreshToken }).save();
+  const userToken = await new UserToken({
+    userId: customer._id,
+    token: refreshToken,
+  }).save();
 
   res.send({
     message: "success",
     user: customer._id,
     accessToken: accessToken,
+    refreshToken: refreshToken.token,
   });
 };
