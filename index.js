@@ -4,12 +4,11 @@ const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
 
-app.disable("x-powered-by");
-
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const customerRoute = require("./customer/customer.router");
+const sellerRoute = require("./seller/seller.router");
 
 app.disable("x-powered-by");
 
@@ -21,10 +20,12 @@ app.get("/", (req, res) => {
   res.send("Test test");
 });
 
-app.use("/customer", customerRoute);
+app.use("/api/v1/customer", customerRoute);
+app.use("/api/v1/seller", sellerRoute);
 
-mongoose.connect(process.env.mongoUri).then((result) => {
-  app.listen(3000, () => {
+
+mongoose.connect(process.env.MONGO_URI).then((result) => {
+  app.listen(process.env.PORT || 3000, () => {
     console.log(">> server started");
   });
 });

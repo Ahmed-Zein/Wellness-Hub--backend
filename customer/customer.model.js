@@ -33,12 +33,12 @@ const customerSchema = new Schema({
   phone: {
     countryCode: {
       type: String,
-      required: true
-  },
-  number: {
+      required: true,
+    },
+    number: {
       type: String,
-      required: true
-  }
+      required: true,
+    },
   },
   // userImage: { type: String, required: false }, // accepts base64 images
   creditCard: { type: String, required: false }, // this dummy for now

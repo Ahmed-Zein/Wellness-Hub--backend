@@ -16,55 +16,6 @@ exports.verifyToken = (token) =>
     });
   });
 
-exports.singup = async (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  const name = req.body.name;
-
-  const alreadyExists = await User.findOne({ email: email }).exec();
-  if (alreadyExists) {
-    return res.status(400).send({ message: "user already exists" });
-  }
-
-  try {
-    const hashedPassword = await bcrypt.hash(password, 12);
-    if (!hashedPassword) throw Error("server error");
-
-    const user = await User.create({
-      name: name,
-      email: email,
-      password: hashedPassword,
-      snippets: [],
-    });
-    const token = this.newToken(user);
-    res.status(201).send({ token });
-  } catch (e) {
-    console.error(e);
-    res.status(500).send({ error: e });
-  }
-};
-
-exports.singin = async (req, res, next) => {
-  const email = req.body.email;
-  const password = req.body.password;
-
-  const user = await User.findOne({ email: email })
-    .select("email password")
-    .exec();
-
-  if (!user) {
-    return res.status(401).send({ message: "email not exist" });
-  }
-
-  const isCorrectPassword = await bcrypt.compare(password, user.password);
-  if (!isCorrectPassword) {
-    return res.status(401).send({ message: "wrong password" });
-  }
-  const token = this.newToken(user);
-
-  res.status(200).send({ token });
-};
-
 exports.protect = async (req, res, next) => {
   const bearer = req.headers.authorization;
 

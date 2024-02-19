@@ -8,9 +8,14 @@ const sellerSchema = new mongoose.Schema({
     maxlength: [50, "Name is too long"],
   },
   phone: {
-    required: true,
-    countryCode: String,
-    phoneNumber: String,
+    countryCode: {
+      type: String,
+      required: true,
+    },
+    number: {
+      type: String,
+      required: true,
+    },
   },
   email: {
     type: String,
@@ -21,9 +26,9 @@ const sellerSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: [8, "Password must be at least 8 characters long"],
-    set: function (password) {
-      return bcrypt.hashSync(password, 10); // 10 is the saltRounds parameter
-    },
+    // set: function (password) {
+    //   return bcrypt.hashSync(password, 10); // 10 is the saltRounds parameter
+    // },
   },
   creditCard: String, // dummy data
   // userImage: String,
@@ -32,7 +37,7 @@ const sellerSchema = new mongoose.Schema({
     required: true,
     lowercase: true,
     minLength: 14,
-    maxLength: 14,
+    maxLength: 20,
   },
   createdAt: {
     type: Date,
@@ -52,9 +57,9 @@ const sellerSchema = new mongoose.Schema({
   //   blog: [mongoose.SchemaTypes.ObjectId],
 });
 
-userSchema.pre(`save`, function (next) {
-  this.UpdatedAt = Date.now();
-  next();
-});
+// userSchema.pre(`save`, function (next) {
+//   this.UpdatedAt = Date.now();
+//   next();
+// });
 
 module.exports = mongoose.model("Seller", sellerSchema);
