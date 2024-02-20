@@ -13,3 +13,17 @@ User: {
     created-At:,
 }
 ```
+
+```json
+MEALS: {
+    sellerID: "d",
+    Title: "d",
+    Description: "d",
+    Price: "d",
+    addons: [{ price, string }],
+    Images: ["URLs"], // dummy Rating:'d', Reviews:{
+    customerID: "d",
+    Contents: "d",
+};
+
+```
