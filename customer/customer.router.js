@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { register, login } = require("./customer.controller");
-const { authenticateToken } = require("../utils");
+const { authenticateToken } = require("../common/jwt");
 
 const router = express.Router();
 
