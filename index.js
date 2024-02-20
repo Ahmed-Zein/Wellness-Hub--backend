@@ -8,7 +8,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
-const customerRoute = require("./customer/customer.router");
+const customerRoute = require("./customer/customer.routes");
 const sellerRoute = require("./seller/seller.router");
 
 app.disable("x-powered-by");

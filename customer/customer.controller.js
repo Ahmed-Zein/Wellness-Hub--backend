@@ -23,7 +23,7 @@ exports.register = async (req, res, next) => {
   try {
     const alreadyExists = await Customer.findOne({ email: email }).exec();
     if (alreadyExists) {
-      return res.status(400).send({ message: "user already exists" });
+      return res.status(409).send({ message: "user already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
