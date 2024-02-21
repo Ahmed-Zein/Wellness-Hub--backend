@@ -43,7 +43,7 @@ const productSchema = new mongoose.Schema({
     type: String,
     enum: ['Small', 'Medium', 'Large'] ,
   } ,
-  finalRate: { 
+  finalrate: { 
     type: Number,
      default: 0 
     },
@@ -66,8 +66,8 @@ const productSchema = new mongoose.Schema({
 
 // Calculate the average rating before saving the product
 //productSchema.pre('save', function (next) {
-  //const totalRate = this.rate.reduce((sum, r) => sum + r.rate, 0); //reduce is a funtion in JS to reduce an array to a single value  and its arrgument is a callback function of 2 parameters the first is the  accumulator that accumlates the results of each iteration (el m5zn el bn5zn feh ) while the r represensents each element of the array that while be accumlated 
-  //this.finalRate = totalRate / this.rate.length || 0; //calculate the average by division and if the rate array is empty it will equal 0
+  //const totalrate = this.rate.reduce((sum, r) => sum + r.rate, 0); //reduce is a funtion in JS to reduce an array to a single value  and its arrgument is a callback function of 2 parameters the first is the  accumulator that accumlates the results of each iteration (el m5zn el bn5zn feh ) while the r represensents each element of the array that while be accumlated 
+  //this.finalrate = totalrate / this.rate.length || 0; //calculate the average by division and if the rate array is empty it will equal 0
   //next();
 //});
 
