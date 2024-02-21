@@ -10,6 +10,8 @@ const cors = require("cors");
 
 const customerRoute = require("./src/customer/customer.routes");
 const sellerRoute = require("./src/seller/seller.router");
+//const productRoute = require("./src/product/product.routes");
+
 
 app.disable("x-powered-by");
 
