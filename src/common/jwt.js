@@ -15,12 +15,13 @@ exports.authenticateToken = (req, res, next) => {
 
   if (token == null) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    console.log("jwt error: " + err);
+  jwt.verify(token, process.env.TOKEN_SECRET, (err, payload) => {
+    if (err) {
+      console.log("jwt error: " + err);
+      return res.sendStatus(403).end();
+    }
 
-    if (err) return res.sendStatus(403).end();
-
-    req.user = user;
+    req.user = payload.userId;
 
     next();
   });

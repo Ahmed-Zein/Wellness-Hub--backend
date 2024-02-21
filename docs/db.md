@@ -16,14 +16,14 @@ User: {
 
 ```json
 MEALS: {
-    sellerID: "d",
-    Title: "d",
-    Description: "d",
-    Price: "d",
-    addons: [{ price, string }],
-    Images: ["URLs"], // dummy Rating:'d', Reviews:{
-    customerID: "d",
-    Contents: "d",
+- [x] sellerID: "d",
+- [x] Title: "d",
+- [x]  Description: "d",
+- [x] Price: "d",
+// - [ ] addons: [{ price, string }],
+- [x] Images: ["URLs"], // dummy Rating:'d', Reviews:{
+// - [ ] customerID: "d",
+- [ ] Contents: "d",
 };
 
 ```

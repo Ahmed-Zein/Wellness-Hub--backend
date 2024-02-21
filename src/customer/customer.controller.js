@@ -39,12 +39,12 @@ exports.register = async (req, res, next) => {
     const result = await customer.save();
 
     const accessToken = generateAccessToken(
-      { _id: customer._id },
+      { userId: customer._id },
       process.env.TOKEN_SECRET
     );
 
     const refreshToken = generateAccessToken(
-      { _id: customer._id },
+      { userId: customer._id },
       process.env.TOKEN_SECRET,
       "30d"
     );
@@ -81,7 +81,7 @@ exports.login = async (req, res, next) => {
     }
 
     const accessToken = generateAccessToken(
-      { _id: customer._id },
+      { userId: customer._id },
       process.env.TOKEN_SECRET
     );
 
