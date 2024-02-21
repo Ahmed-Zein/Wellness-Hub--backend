@@ -57,7 +57,7 @@ const sellerSchema = new mongoose.Schema({
   //   blog: [mongoose.SchemaTypes.ObjectId],
 });
 
-// userSchema.pre(`save`, function (next) {
+// sellerSchema.pre(`save`, function (next) {
 //   this.UpdatedAt = Date.now();
 //   next();
 // });
