@@ -10,8 +10,8 @@ const cors = require("cors");
 
 const customerRoute = require("./src/customer/customer.routes");
 const sellerRoute = require("./src/seller/seller.router");
-//const productRoute = require("./src/product/product.routes");
-
+const productRoute = require("./src/product/product.routes");
+const mealsRoute = require("./src/meals/meal.routes");
 
 app.disable("x-powered-by");
 
@@ -26,7 +26,8 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/customer", customerRoute);
 app.use("/api/v1/seller", sellerRoute);
-//app.use("/api/v1/product", productRoute);
+app.use("/api/v1/product", productRoute);
+app.use("/api/v1/product", mealsRoute);
 
 app.use((err, req, res, next) => {
   console.error(err);
