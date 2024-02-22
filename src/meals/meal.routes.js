@@ -4,12 +4,9 @@ const { body, validationResult } = require("express-validator");
 const MealController = require("./meal.contoller");
 const ReviewController = require("./reviews.controller");
 const { authenticateToken } = require("../common/jwt");
+const { ping } = require("../common/utils");
 
 const router = express.Router();
-
-const ping = (req, res) => {
-  res.status(200).end();
-};
 
 const validationMiddleWare = (req, res, next) => {
   const errors = validationResult(req);

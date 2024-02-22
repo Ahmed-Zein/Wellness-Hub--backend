@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/customer", customerRoute);
 app.use("/api/v1/seller", sellerRoute);
 app.use("/api/v1/product", productRoute);
-app.use("/api/v1/product", mealsRoute);
+app.use("/api/v1/meals", mealsRoute);
 
 app.use((err, req, res, next) => {
   console.error(err);
