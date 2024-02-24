@@ -59,7 +59,7 @@ exports.register = async (req, res, next) => {
     });
   } catch (err) {
     res.status(500);
-    next(e.message);
+    next(err.message);
   }
 };
 
