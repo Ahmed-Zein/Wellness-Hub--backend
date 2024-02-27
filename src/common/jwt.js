@@ -16,10 +16,11 @@ exports.authenticateToken = (req, res, next) => {
   if (token == null) return res.sendStatus(401);
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    console.log("jwt error: " + err);
-
-    if (err) return res.sendStatus(403).end();
-
+    if (err) {
+      console.error("jwt error: " + err);
+      res.sendStatus(403).end();
+      return;
+    }
     req.user = user;
 
     next();

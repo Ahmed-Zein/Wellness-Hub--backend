@@ -15,12 +15,11 @@ exports.getAllMeals = async (req, res) => {
 exports.getMeal = async (req, res) => {
   try {
     const meal = await Meal.findById(req.params.mealId);
-    if (meal) {
-      console.log(meal);
-      res.json(formatMeal(meal));
-    } else {
+    if (!meal) {
       res.status(404).json({ message: "Meal not found" });
     }
+    console.log(meal);
+    res.json(formatMeal(meal));
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -96,7 +95,6 @@ exports.updateMeal = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
-
 
 function formatMeal(meal) {
   return {
