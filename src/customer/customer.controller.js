@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const Customer = require("./customer.model");
 const UserToken = require("../models/user.token.model");
 const { generateAccessToken } = require("../common/jwt");
+const Logger = require("../common/logger");
 
 /**
  * @api {post} /api/v1/customer register new user
@@ -118,6 +119,7 @@ exports.getUserData = async (req, res, next) => {
     customer = await Customer.findById(req.params.userId);
     if (!customer) throw Error("user id not found");
   } catch (err) {
+    Logger.error(err);
     res.status(404).json({ message: err.message }).end();
     return;
   }
@@ -135,6 +137,7 @@ exports.getUserWishList = async (req, res, next) => {
     customer = await Customer.findById(req.params.userId);
     if (!customer) throw Error("user id not found");
   } catch (err) {
+    Logger.error(err);
     res.status(404).json({ message: err.message }).end();
     return;
   }
@@ -157,6 +160,7 @@ exports.addToWishlist = async (req, res, next) => {
       if (!product) throw Error("item id not found");
     }
   } catch (err) {
+    Logger.error(err);
     res.status(404).json({ message: err.message }).end();
     return;
   }
