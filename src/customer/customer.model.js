@@ -69,15 +69,15 @@ const customerSchema = new Schema({
   //       },
   //     },
   //   ],
-  // wishlist:[
-  //     {
-  //         productId:{
-  //         type: Schema.Types.ObjectId,
-  //         ref: "Product",
-  //         required: true,
-  //       },
-  //     }
-  // ],
+  wishlist:[
+      {
+          productId:{
+          type: Schema.Types.ObjectId,
+          ref: "Product",
+          // required: true,
+        },
+      }
+  ],
 });
 
 module.exports = mongoose.model("Customer", customerSchema);

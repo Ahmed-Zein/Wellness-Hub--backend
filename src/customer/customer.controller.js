@@ -111,3 +111,55 @@ exports.login = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getUserData = async (req, res, next) => {
+  let customer;
+  try {
+    customer = await Customer.findById(req.params.userId);
+    if (!customer) throw Error("user id not found");
+  } catch (err) {
+    res.status(404).json({ message: err.message }).end();
+    return;
+  }
+  res.json({
+    name: customer.name,
+    email: customer.email,
+    phone: customer.phone,
+    address: customer.address || "",
+    following: customer.follows.length,
+  });
+};
+exports.getUserWishList = async (req, res, next) => {
+  let customer;
+  try {
+    customer = await Customer.findById(req.params.userId);
+    if (!customer) throw Error("user id not found");
+  } catch (err) {
+    res.status(404).json({ message: err.message }).end();
+    return;
+  }
+  res.json({
+    message: "success",
+    wishlist: customer.wishlist,
+  });
+};
+
+exports.addToWishlist = async (req, res, next) => {
+  let customer;
+  let product;
+  try {
+    customer = await Customer.findById(req.params.userId);
+    if (!customer) throw Error("user not found");
+    console.log(req.params);
+    product = await Product.findById(req.params.productId);
+    if (!product) {
+      product = await Meal.findById(req.params.productId);
+      if (!product) throw Error("item id not found");
+    }
+  } catch (err) {
+    res.status(404).json({ message: err.message }).end();
+    return;
+  }
+  customer.wishlist.addToSet();
+  res.status(200).json({ message: "success" });
+};
