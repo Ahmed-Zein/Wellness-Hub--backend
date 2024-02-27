@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const logger = require("./logger");
 
 exports.generateAccessToken = (payload, key, expiresIn) => {
   if (!key) {
@@ -17,7 +18,7 @@ exports.authenticateToken = (req, res, next) => {
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
     if (err) {
-      console.error("jwt error: " + err);
+      logger.error("jwt error: " + err);
       res.sendStatus(403).end();
       return;
     }
