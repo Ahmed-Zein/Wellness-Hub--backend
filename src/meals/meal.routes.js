@@ -1,30 +1,29 @@
 const express = require("express");
 const { body, validationResult } = require("express-validator");
 
-const MealController = require("./meal.contoller");
-const ReviewController = require("./reviews.controller");
+// Import controllers and middleware
+const mealController = require("./meal.contoller");
+const reviewController = require("./reviews.controller");
 const { authenticateToken } = require("../common/jwt");
-const { ping } = require("../common/utils");
+const { ping, validationMiddleware } = require("../common/utils");
 
 const router = express.Router();
 
-const validationMiddleWare = (req, res, next) => {
-  const errors = validationResult(req);
-  if (errors.isEmpty()) {
-    return next();
-  }
-  console.log(errors);
-  const extractedErrors = [];
-  errors.array().map((err) => extractedErrors.push({ [err.path]: err.msg }));
-
-  return res
-    .status(422)
-    .json({ message: "validation error", errors: extractedErrors });
-};
+// Define constants for validation messages
+const MINIMUM_REVIEW_LENGTH = 3;
+const MINIMUM_TITLE_LENGTH = 3;
+const MINIMUM_DESCRIPTION_LENGTH = 3;
+const MINIMUM_TAG_COUNT = 1;
 
 // Reviews endpoints
 
-// Create a new meal
+/**
+ * POST /api/v1/meals/:mealId/reviews
+ * Create a new review for a specific meal.
+ * Requires authentication token.
+ * Request Body: { content: string }
+ * Response: Newly created review object
+ */
 router.post(
   "/:mealId/reviews",
   authenticateToken,
@@ -33,47 +32,76 @@ router.post(
       .isLength({ min: 3 })
       .withMessage("Minimum review length is 3"),
   ],
-  validationMiddleWare,
-  ReviewController.addReview
+  validationMiddleware,
+  reviewController.addReview
 );
 
-// Update a meal
+// TODO: Update a review for a specific meal (Placeholder route)
 router.put("/:mealId/reviews", authenticateToken, ping);
 
-// Delete a meal
+// TODO: Delete a review for a specific meal (Placeholder route)
 router.delete("/:mealId/reviews", authenticateToken, ping);
 
-// MEALS endpoints
+// Meals Endpoints
 
-// Get meal by ID
-router.get("/:mealId", MealController.getMeal);
+/**
+ * GET /api/v1/meals/:mealId
+ * Get details of a specific meal by its ID.
+ * Response: Meal object
+ */
+router.get("/:mealId", mealController.getMeal);
 
-// Update a meal
-router.put("/:mealId", authenticateToken, MealController.updateMeal);
+/**
+ * PUT /api/v1/meals/:mealId
+ * Update details of a specific meal by its ID.
+ * Requires authentication token and seller authorization.
+ * Request Body: Updated meal details
+ * Response: Updated meal object
+ */
+router.put("/:mealId", authenticateToken, mealController.updateMeal);
 
-// Delete a meal
-router.delete("/:mealId", authenticateToken, MealController.deleteOneMeal);
+/**
+ * DELETE /api/v1/meals/:mealId
+ * Delete a specific meal by its ID.
+ * Requires authentication token and seller authorization.
+ * Response: Success message
+ */
+router.delete("/:mealId", authenticateToken, mealController.deleteOneMeal);
 
-// Get All meals
-router.get("/", MealController.getAllMeals);
+/**
+ * GET /api/v1/meals
+ * Get all meals.
+ * Response: Array of meal objects
+ */
+router.get("/", mealController.getAllMeals);
 
-// Create a new meal
+/**
+ * POST /api/v1/meals
+ * Create a new meal.
+ * Requires authentication token.
+ * Request Body: { seller: string, title: string, description: string, price: number, tags: string[] }
+ * Response: Newly created meal object
+ */
 router.post(
   "/",
   authenticateToken,
   [
-    body("seller").isLength({ min: 1 }).withMessage("seller id is required"),
-    body("title").isLength({ min: 3 }).withMessage("minimum title lenght is 3"),
+    body("seller").exists().withMessage("Seller ID is required"),
+    body("title")
+      .isLength({ min: MINIMUM_TITLE_LENGTH })
+      .withMessage(`Minimum title length is ${MINIMUM_TITLE_LENGTH}`),
     body("description")
-      .isLength({ min: 3 })
-      .withMessage("minimum description lenght is 3"),
-    body("price").isFloat().withMessage("price should not be empty"),
+      .isLength({ min: MINIMUM_DESCRIPTION_LENGTH })
+      .withMessage(
+        `Minimum description length is ${MINIMUM_DESCRIPTION_LENGTH}`
+      ),
+    body("price").isFloat().withMessage("Price should be a valid number"),
     body("tags")
-      .isArray({ min: 1 })
-      .withMessage("you should enter at least one tage"),
+      .isArray({ min: MINIMUM_TAG_COUNT })
+      .withMessage(`You should enter at least ${MINIMUM_TAG_COUNT} tag`),
   ],
-  validationMiddleWare,
-  MealController.addMeal
+  validationMiddleware,
+  mealController.addMeal
 );
 
 module.exports = router;
