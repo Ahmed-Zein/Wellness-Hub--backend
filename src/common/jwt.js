@@ -21,7 +21,7 @@ exports.authenticateToken = (req, res, next) => {
       res.sendStatus(403).end();
       return;
     }
-    req.user = user;
+    req.user = user._id;
 
     next();
   });
