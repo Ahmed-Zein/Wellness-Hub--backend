@@ -1,5 +1,5 @@
 const express = require("express");
-const { body, validationResult } = require("express-validator");
+const { body } = require("express-validator");
 
 // Import controllers and middleware
 const mealController = require("./meal.contoller");
