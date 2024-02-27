@@ -12,6 +12,7 @@ const customerRoute = require("./src/customer/customer.routes");
 const sellerRoute = require("./src/seller/seller.router");
 const productRoute = require("./src/product/product.routes");
 const mealsRoute = require("./src/meals/meal.routes");
+const Logger = require("./src/common/logger");
 
 app.disable("x-powered-by");
 
@@ -30,8 +31,8 @@ app.use("/api/v1/products", productRoute);
 app.use("/api/v1/meals", mealsRoute);
 
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.send({ error: err });
+  Logger.error(err);
+  res.send({ error: err.message });
 });
 
 const port = process.env.PORT || 3000;
