@@ -2,7 +2,7 @@ const Meal = require("./meal.model");
 const logger = require("../common/logger");
 const { transformMealToClientFormat } = require("../common/utils");
 
-exports.getAllMeals = async (req, res) => {
+exports.getAllMeals = async (req, res, next) => {
   try {
     const meals = await Meal.find();
     const formattedMeals = meals.map(transformMealToClientFormat);
@@ -13,7 +13,7 @@ exports.getAllMeals = async (req, res) => {
   }
 };
 
-exports.getMeal = async (req, res) => {
+exports.getMeal = async (req, res, next) => {
   try {
     const meal = await Meal.findById(req.params.mealId);
     if (!meal) {
@@ -26,8 +26,7 @@ exports.getMeal = async (req, res) => {
   }
 };
 
-exports.addMeal = async (req, res) => {
-
+exports.addMeal = async (req, res, next) => {
   if (req.body.seller !== req.user) {
     logger.error("Seller id does not match current user id");
     res.status(403).json({
@@ -57,7 +56,7 @@ exports.addMeal = async (req, res) => {
   }
 };
 
-exports.deleteOneMeal = async (req, res) => {
+exports.deleteOneMeal = async (req, res, next) => {
   try {
     const meal = await Meal.findById(req.params.mealId);
     if (!meal) {
