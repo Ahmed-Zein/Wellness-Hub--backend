@@ -1,17 +1,15 @@
 const Meal = require("./meal.model");
-const Logger = require("../common/logger");
-const { formatMeal } = require("../common/utils");
+const logger = require("../common/logger");
+const { transformMealToClientFormat } = require("../common/utils");
 
 exports.getAllMeals = async (req, res) => {
   try {
     const meals = await Meal.find();
-    const formattedMeals = meals.map(formatMeal);
-    console.log(formattedMeals);
+    const formattedMeals = meals.map(transformMealToClientFormat);
     res.status(200).json(formattedMeals);
   } catch (err) {
     res.status(500);
-    Logger.error(err.message);
-    next(new Error("Internal server Error"));
+    next(Error("Internal server error"));
   }
 };
 
@@ -21,25 +19,25 @@ exports.getMeal = async (req, res) => {
     if (!meal) {
       res.status(404).json({ message: "Meal not found" });
     }
-    console.log(meal);
-    res.json(formatMeal(meal));
+    res.json(transformMealToClientFormat(meal));
   } catch (err) {
-    Logger.error(err.message);
-    res.status(500).json({ message: err.message });
+    res.status(500);
+    next(Error("Internal server error"));
   }
 };
 
 exports.addMeal = async (req, res) => {
-  if (req.body.seller != req.user) {
-    Logger.error("seller id does not match current user idot your Meal");
+
+  if (req.body.seller !== req.user) {
+    logger.error("Seller id does not match current user id");
     res.status(403).json({
-      message: "seller id does not match current user idot your Meal",
+      message: "Unauthorized access: You are not the seller of this meal",
     });
     return;
   }
 
   const meal = new Meal({
-    seller: req.body.seller,
+    seller: req.user,
     title: req.body.title,
     description: req.body.description,
     price: req.body.price,
@@ -49,10 +47,13 @@ exports.addMeal = async (req, res) => {
 
   try {
     const newMeal = await meal.save();
-    res.status(201).json({ ...formatMeal(newMeal), message: "success" });
+    res.status(201).json({
+      ...transformMealToClientFormat(newMeal),
+      message: "Meal added successfully",
+    });
   } catch (err) {
-    Logger.error(err.message);
-    res.status(400).json({ message: err.message });
+    res.status(400);
+    next(Error("Invalid data provided for adding meal"));
   }
 };
 
@@ -60,36 +61,37 @@ exports.deleteOneMeal = async (req, res) => {
   try {
     const meal = await Meal.findById(req.params.mealId);
     if (!meal) {
-      res.status(404).json({ message: "Meal not found" }).end();
+      res.status(404).json({ message: "Meal not found" });
       return;
     }
-    if (meal.seller.toString() === req.user.toString()) {
-      await meal.deleteOne({ _id: req.params.mealId });
-      res.json({ message: "Meal deleted" }).end();
-    } else {
+    if (meal.seller.toString() !== req.user.toString()) {
       res.status(403).json({
-        message: "seller id does not match current user idot your Meal",
+        message: "Unauthorized access: You are not the seller of this meal",
       });
+      return;
     }
+    await meal.deleteOne({ _id: req.params.mealId });
+    res.json({ message: "Meal deleted successfully" });
   } catch (err) {
-    Logger.error(err.message);
-    res.status(500).json({ message: err.message });
+    res.status(500);
+    next(Error("Internal server error"));
   }
 };
 
-exports.updateMeal = async (req, res) => {
+exports.updateMeal = async (req, res, next) => {
   try {
     const meal = await Meal.findById(req.params.mealId);
     if (!meal) {
       res.status(404).json({ message: "Meal not found" });
       return;
     }
-    if (req.user != meal.seller) {
+    if (req.user !== meal.seller.toString()) {
       res.status(403).json({
-        message: "seller id does not match current userId of the Meal",
+        message: "Unauthorized access: You are not the seller of this meal",
       });
       return;
     }
+
     meal.title = req.body.title || meal.title;
     meal.description = req.body.description || meal.description;
     meal.price = req.body.price || meal.price;
@@ -97,10 +99,14 @@ exports.updateMeal = async (req, res) => {
     meal.images = req.body.images || meal.images;
 
     const updatedMeal = await meal.save();
-    res.json(formatMeal({ message: "success", ...formatMeal(updatedMeal) }));
+
+    res.json({
+      message: "Meal updated successfully",
+      id: updatedMeal._id,
+    });
   } catch (err) {
-    Logger.error(err.message);
-    res.status(400).json({ message: err.message });
+    res.status(400);
+    next(Error("Invalid data provided for updating meal"));
   }
 };
 
