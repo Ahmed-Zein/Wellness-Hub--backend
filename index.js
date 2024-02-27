@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
-  res.send("Test test");
+  res.send("<h1>WellnessHub</h1>");
 });
 
 app.use("/api/v1/customer", customerRoute);
