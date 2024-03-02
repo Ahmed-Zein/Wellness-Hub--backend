@@ -4,6 +4,7 @@ const Customer = require("./customer.model");
 const UserToken = require("../models/user.token.model");
 const { generateAccessToken } = require("../common/jwt");
 const Logger = require("../common/logger");
+const logger = require("../common/logger");
 
 /**
  * @api {post} /api/v1/customer register new user
@@ -68,16 +69,19 @@ exports.login = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-    const customer = await Customer.findOne({ email: email })
+    const customer = await Customer.findOne({ email: email.trim() })
       .select("email password _id")
       .exec();
 
+    logger.info(email);
     if (!customer) {
+      logger.error("email: " + email + " no exist");
       return res.status(401).send({ message: "email not exist" });
     }
 
     const isCorrectPassword = await bcrypt.compare(password, customer.password);
     if (!isCorrectPassword) {
+      logger.error("wrong password");
       return res.status(401).send({ message: "wrong password" });
     }
 
