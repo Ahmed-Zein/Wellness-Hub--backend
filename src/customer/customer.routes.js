@@ -2,12 +2,26 @@ const express = require("express");
 
 const customerController = require("./customer.controller");
 const { authenticateToken } = require("../common/jwt");
+const { body } = require("express-validator");
+const { validationMiddleware } = require("../common/utils");
 
 const router = express.Router();
 
 router.post("/register", customerController.register);
 
-router.post("/login", customerController.login);
+router.post(
+  "/login",
+  [
+    body("email")
+      .exists()
+      .withMessage("email is required")
+      .trim()
+      .isEmail()
+      .withMessage("invalid email"),
+  ],
+  validationMiddleware,
+  customerController.login
+);
 
 // get user data
 router.get("/:userId", authenticateToken, customerController.getUserData);

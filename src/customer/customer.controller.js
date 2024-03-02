@@ -69,11 +69,11 @@ exports.login = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-    const customer = await Customer.findOne({ email: email.trim() })
+    const customer = await Customer.findOne({ email: email })
       .select("email password _id")
       .exec();
 
-    logger.info(email);
+    logger.info(email+password);
     if (!customer) {
       logger.error("email: " + email + " no exist");
       return res.status(401).send({ message: "email not exist" });
