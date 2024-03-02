@@ -2,6 +2,7 @@ const express = require("express");
 
 const Seller = require("./seller.model");
 const bcrypt = require("bcryptjs");
+const logger = require("../common/logger");
 // const controller = require("./snippet.controller");
 // const protect = require("../../utils/auth").protect;
 
@@ -44,23 +45,28 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+  logger.info(email + password);
 
-  const customer = await Seller.findOne({ email: email })
+  const customer = await Seller.findOne({ email: email.trim() })
     .select("email password _id")
     .exec();
 
   if (!customer) {
+    logger.error("email not exist");
     return res.status(401).send({ message: "email not exist" });
   }
 
   const isCorrectPassword = await bcrypt.compare(password, customer.password);
   if (!isCorrectPassword) {
+    logger.error("wrong password");
     return res.status(401).send({ message: "wrong password" });
   }
-  //   const token = this.newToken(customer);
-  //   res.status(200).send({ token });
 
-  res.send({ message: "success", user: customer._id, token: "dummydata" });
+  res.send({
+    message: "success",
+    user: customer._id,
+    token: "storethistokenfornow",
+  });
 });
 
 module.exports = router;
