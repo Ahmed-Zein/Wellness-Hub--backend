@@ -30,6 +30,16 @@ exports.transformMealToClientFormat = (meal) => {
     images: meal.images,
     description: meal.description,
     tags: meal.tags,
+    ingredients: [
+      "Pizza dough",
+      "Tomato sauce",
+      "Fresh mozzarella cheese",
+      "Fresh basil leaves",
+      "Olive oil",
+      "Salt and pepper to taste",
+    ],
+    rate: 3.4,
+    address: "cairo",
     reviews: meal.reviews.for,
   };
 };
