@@ -1,12 +1,14 @@
 const express = require("express");
 
-const Seller = require("./seller.model");
 const bcrypt = require("bcryptjs");
-const logger = require("../common/logger");
 const { body } = require("express-validator");
+
+const Seller = require("./seller.model");
+const UserToken = require("../models/user.token.model");
+
+const logger = require("../common/logger");
 const { validationMiddleware } = require("../common/utils");
-// const controller = require("./snippet.controller");
-// const protect = require("../../utils/auth").protect;
+const { generateAccessToken } = require("../common/jwt");
 
 const router = express.Router();
 
@@ -56,31 +58,56 @@ router.post(
       .withMessage("invalid email"),
   ],
   validationMiddleware,
-  async (req, res) => {
+  async (req, res, next) => {
     const { email, password } = req.body;
-    logger.info(email + password);
 
-    const customer = await Seller.findOne({ email: email })
-      .select("email password _id")
-      .exec();
+    try {
+      const seller = await Seller.findOne({ email: email })
+        .select("email password _id")
+        .exec();
 
-    if (!customer) {
-      logger.error("email not exist");
-      return res.status(401).send({ message: "seller: email not exist" });
+      logger.info(email + password);
+      if (!seller) {
+        logger.error("email: " + email + " no exist");
+        return res.status(401).send({ message: "email not exist" });
+      }
+
+      const isCorrectPassword = await bcrypt.compare(password, seller.password);
+      if (!isCorrectPassword) {
+        logger.error("wrong password");
+        return res.status(401).send({ message: "wrong password" });
+      }
+
+      const accessToken = generateAccessToken(
+        { _id: seller._id },
+        process.env.TOKEN_SECRET
+      );
+
+      let refreshToken = await UserToken.findOne({
+        userId: seller._id,
+      }).select("token");
+      if (!refreshToken) {
+        refreshToken = generateAccessToken(
+          { _id: seller._id },
+          process.env.TOKEN_SECRET,
+          "30d"
+        );
+      }
+
+      const userToken = await new UserToken({
+        userId: seller._id,
+        token: refreshToken,
+      }).save();
+
+      res.send({
+        message: "success",
+        userId: seller._id,
+        accessToken: accessToken,
+        refreshToken: refreshToken.token,
+      });
+    } catch (err) {
+      next(err);
     }
-
-    const isCorrectPassword = await bcrypt.compare(password, customer.password);
-    if (!isCorrectPassword) {
-      logger.error("wrong password");
-      return res.status(401).send({ message: "seller: wrong password" });
-    }
-
-    logger.info("successfull login");
-    res.send({
-      message: "success az",
-      user: customer._id,
-      token: "storethistokenfornow",
-    });
   }
 );
 
