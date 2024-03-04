@@ -58,7 +58,7 @@ router.post(
   validationMiddleware,
   async (req, res) => {
     const { email, password } = req.body;
-    logger.info(email+ password);
+    logger.info(email + password);
 
     const customer = await Seller.findOne({ email: email })
       .select("email password _id")
@@ -83,5 +83,25 @@ router.post(
     });
   }
 );
+
+// Get /sellers  endpoint to get the data of a specific  seller
+router.get("/:sellerid", async (req, res) => {
+  try {
+    const seller = await Seller.findById(req.params.sellerid);
+    if (!seller) {
+      return res.status(404).json({ message: "Seller not found" });
+    }
+
+    res.status(200).json({
+      name: seller.name,
+      email: seller.email,
+      phone: seller.phone,
+      meals: seller.meals,
+      products: seller.products,
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 
 module.exports = router;
