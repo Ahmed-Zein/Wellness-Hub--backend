@@ -110,8 +110,7 @@ exports.updateMeal = async (req, res, next) => {
 };
 
 const dummyImgs = [
-  "https://www.middleeasteye.net/news/sisis-breakfast-simple-family-outrages-egyptians",
-  "https://www.emaratalyoum.com/politics/news/2022-03-24-1.1613898",
-  "https://www.reddit.com/r/memes/comments/f27raq/beat_the_living_shit_out_of_it/",
   "https://eb8e7f6d53.nxcli.net/wp-content/uploads/2018/05/Untitled2.png",
+  "https://www.emaratalyoum.com/polopoly_fs/1.1613899.1648092935!/image/image.jpg",
+  'https://homechef.imgix.net/https%3A%2F%2Fasset.homechef.com%2Fuploads%2Fmeal%2Fplated%2F34178%2F821014.001.01SirloinSteakWithParsleyMustardButter_Ecomm_4_of_7_-02-07-23-082031.jpg?ixlib=rails-1.1.0&w=850&auto=format&s=da188132b36f42df1312a57e23a2bcee',
 ];
