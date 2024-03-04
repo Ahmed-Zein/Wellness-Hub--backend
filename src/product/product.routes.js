@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("./product.model");
+const Seller = require("../seller/seller.model")
 const { authenticateToken } = require("../common/jwt"); //imported the authenticate token
 
 // GET /products: endpoint to  Get a list of all products. /
