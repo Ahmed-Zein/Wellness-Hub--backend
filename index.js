@@ -12,6 +12,7 @@ const customerRoute = require("./src/customer/customer.routes");
 const sellerRoute = require("./src/seller/seller.router");
 const productRoute = require("./src/product/product.routes");
 const mealsRoute = require("./src/meals/meal.routes");
+const orderRoute = require("./src/order/order.routes")
 const Logger = require("./src/common/logger");
 
 app.disable("x-powered-by");
@@ -29,6 +30,7 @@ app.use("/api/v1/customer", customerRoute);
 app.use("/api/v1/seller", sellerRoute);
 app.use("/api/v1/products", productRoute);
 app.use("/api/v1/meals", mealsRoute);
+app.use("/api/v1/orders", orderRoute);
 
 app.use((err, req, res, next) => {
   Logger.error(err);
