@@ -37,9 +37,10 @@ router.get("/user/orderhistory", authenticateToken, async (req, res) => {
     }
 });
 
-router.post("/create-order", async (req, res) => {
+router.post("/create-order",authenticateToken, async (req, res) => {
     try {
-        const { userId, items } = req.body;
+        const userId = req.user;
+        const { items } = req.body;
 
         // Extract product IDs from the request and convert to ObjectId
         const itemsIds = items.map(item => new Mongoose.Types.ObjectId(item.item));
