@@ -25,7 +25,7 @@ router.post('/checkout-session-stripe', async (req, res) => {
             }
 
             if (!soldItem || !soldItem.title) {
-                throw new Error(`Item with ID ${product} not found or does not have a title`);
+                throw new Error(`Item with ID ${id} not found or does not have a title`);
             }
 
             return {
