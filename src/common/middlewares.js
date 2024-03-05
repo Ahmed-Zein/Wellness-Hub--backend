@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const logger = require("./logger");
 
 // Middleware for handling validation errors
 exports.validationMiddleware = (req, res, next) => {
