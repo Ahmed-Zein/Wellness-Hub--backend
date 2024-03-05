@@ -6,7 +6,7 @@ exports.generateAccessToken = (payload, key, expiresIn) => {
     throw Error("Empty key");
   }
   return jwt.sign(payload, key, {
-    expiresIn: expiresIn || "1d",
+    expiresIn: expiresIn || "30d",
   });
 };
 
