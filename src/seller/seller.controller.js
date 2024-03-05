@@ -47,9 +47,7 @@ exports.register = async (req, res) => {
 
 exports.getSellerData = async (req, res) => {
   try {
-    const seller = await require("./seller.model").findById(
-      req.params.sellerid
-    );
+    const seller = await Seller.findById(req.params.sellerId);
     if (!seller) {
       return res.status(404).json({ message: "Seller not found" });
     }
@@ -62,6 +60,6 @@ exports.getSellerData = async (req, res) => {
       products: seller.products,
     });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: error.message, seller: req.params.sellerId });
   }
 };

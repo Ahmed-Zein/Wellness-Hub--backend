@@ -6,6 +6,7 @@ const Seller = require("./seller.model");
 const { login, findOneUser } = require("../common/auth");
 const { validationMiddleware } = require("../common/middlewares");
 const { register, getSellerData } = require("./seller.controller");
+const { authenticateToken } = require("../common/jwt");
 
 const router = express.Router();
 
@@ -27,6 +28,6 @@ router.post(
 );
 
 // Get /sellers  endpoint to get the data of a specific  seller
-router.get("/:sellerid", getSellerData);
+router.get("/:sellerId", authenticateToken, getSellerData);
 
 module.exports = router;

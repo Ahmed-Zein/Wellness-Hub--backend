@@ -52,15 +52,15 @@ const sellerSchema = new mongoose.Schema({
     type: [String],
     required: true,
   },
-     meals: [mongoose.SchemaTypes.ObjectId],
-    products: [mongoose.SchemaTypes.ObjectId],
+  meals: [mongoose.SchemaTypes.ObjectId],
+  products: [mongoose.SchemaTypes.ObjectId],
   //   blog: [mongoose.SchemaTypes.ObjectId],
 });
 
 // a middlware  to update the updatedat attribute before saving the seller data
- sellerSchema.pre(`save`, function (next) {
+sellerSchema.pre(`save`, function (next) {
   this.UpdatedAt = Date.now();
   next();
- });
+});
 
 module.exports = mongoose.model("Seller", sellerSchema);
