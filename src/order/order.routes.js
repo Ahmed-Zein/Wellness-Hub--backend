@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Order = require("./order.model");
 const Product = require("../product/product.model");
+const Meal = require('../meals/meal.model');
 const Mongoose = require('mongoose');
 const { authenticateToken } = require("../common/jwt");
 
@@ -17,39 +18,49 @@ router.get("/", async (req, res) => {
 
 router.post("/create-order", async (req, res) => {
     try {
-        const { userId, products } = req.body;
+        const { userId, items } = req.body;
 
         // Extract product IDs from the request and convert to ObjectId
-        const productIds = products.map(product => new Mongoose.Types.ObjectId(product.product));
-        console.log(productIds);
+        const itemsIds = items.map(item => new Mongoose.Types.ObjectId(item.item));
+        console.log(itemsIds);
 
         // Fetch products from the database based on product IDs
-        const productsFromDB = await Product.find({ _id: { $in: productIds } });
-        console.log(productsFromDB);
+        const productsFromDB = await Product.find({ _id: { $in: itemsIds } });
+
+        // Fetch meals from the database based on item IDs
+        const mealsFromDB = await Meal.find({ _id: { $in: itemsIds } });
+
+        // Combine the results from both queries
+        const itemsFromDB = [...productsFromDB, ...mealsFromDB];
+
+        console.log(itemsFromDB);
 
         // Calculate total amount
         let totalAmount = 0;
-        products.forEach(product => {
-            const matchingProduct = productsFromDB.find(dbProduct => dbProduct._id.toString() === product.product.toString());
-            if (matchingProduct) {
-                totalAmount += product.quantity * matchingProduct.price;
+        items.forEach(item => {
+            const matchingItem = itemsFromDB.find(dbItem => dbItem._id.toString() === item.item.toString());
+            if (matchingItem) {
+                totalAmount += item.quantity * matchingItem.price;
             }
         });
 
         // Create a new order
         const order = new Order({
             user: userId,
-            products,
+            items, 
             totalAmount,
         });
 
-        // Save the order to the database
+        
         await order.save();
 
         res.status(201).json({ message: "Order created successfully", order });
     } catch (error) {
-        // Handle any errors
-        res.status(400).json({ error: error.message });
+        
+        console.error(error);
+
+  
+        res.status(500).json({ error: "Internal server error", details: error.message });
     }
 });
 
