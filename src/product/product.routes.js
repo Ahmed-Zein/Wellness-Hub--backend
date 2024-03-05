@@ -56,7 +56,7 @@ router.put("/:productId", authenticateToken, async (req, res) => {
     //used for testing compared both values
     //console.log(req.user._id)
     // console.log(String(product.owner))
-    if (String(req.user._id) !== String(product.owner)) {
+    if (String(req.user) !== String(product.owner)) {
       res
         .status(403)
         .json({
@@ -88,7 +88,7 @@ router.delete("/:productId", authenticateToken, async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    if (String(req.user._id) !== String(product.owner)) {
+    if (String(req.user) !== String(product.owner)) {
       return res.status(403).json({
         message: "You can't delete the product as you are not the owner",
       });
@@ -177,7 +177,7 @@ router.put(
         return res.status(404).json({ message: "Review not found" });
       }
 
-      if (String(req.user._id) !== String(review.commentOwner)) {
+      if (String(req.user) !== String(review.commentOwner)) {
         return res.status(403).json({
           message: "You can't delete the review as you are not the owner",
         });
@@ -209,7 +209,7 @@ router.delete(
         return res.status(404).json({ message: "Review not found" });
       }
 
-      if (String(req.user._id) !== String(review.commentOwner)) {
+      if (String(req.user) !== String(review.commentOwner)) {
         return res.status(403).json({
           message: "You can't delete the review as you are not the owner",
         });
