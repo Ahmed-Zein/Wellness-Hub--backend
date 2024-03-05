@@ -5,7 +5,7 @@ const { body } = require("express-validator");
 const mealController = require("./meal.contoller");
 const reviewController = require("./reviews.controller");
 const { authenticateToken } = require("../common/jwt");
-const { ping, validationMiddleware } = require("../common/utils");
+const { ping, validationMiddleware } = require("../common/middlewares");
 
 const router = express.Router();
 
