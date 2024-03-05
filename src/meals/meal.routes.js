@@ -105,7 +105,6 @@ router.post(
     body("tags")
       .isArray({ min: MINIMUM_TAG_COUNT })
       .withMessage(`You should enter at least ${MINIMUM_TAG_COUNT} tag`),
-      body('quantity').isNumeric().isLength({min:1}).withMessage('Quantity should be at least 1')
   ],
   validationMiddleware,
   addMeal

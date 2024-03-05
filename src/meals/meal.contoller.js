@@ -49,7 +49,6 @@ exports.addMeal = async (req, res, next) => {
     price: req.body.price,
     tags: req.body.tags,
     images: dummyImgs,
-    quantity: req.quantity,
   });
 
   try {

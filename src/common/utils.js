@@ -16,7 +16,6 @@ exports.transformMealToClientFormat = (meal) => {
       "Salt and pepper to taste",
     ],
     reviews: meal.reviews,
-    quantity: meal.quantity,
     rate: 3.4,
     price: meal.price,
   };
