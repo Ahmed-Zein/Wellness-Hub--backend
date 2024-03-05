@@ -4,7 +4,6 @@ const Customer = require("./customer.model");
 const UserToken = require("../models/user.token.model");
 const { generateAccessToken } = require("../common/jwt");
 const Logger = require("../common/logger");
-const logger = require("../common/logger");
 
 /**
  * @api {post} /api/v1/customer register new user
@@ -65,57 +64,6 @@ exports.register = async (req, res, next) => {
   }
 };
 
-exports.login = async (req, res, next) => {
-  const { email, password } = req.body;
-
-  try {
-    const customer = await Customer.findOne({ email: email })
-      .select("email password _id")
-      .exec();
-
-    logger.info(email+password);
-    if (!customer) {
-      logger.error("email: " + email + " no exist");
-      return res.status(401).send({ message: "email not exist" });
-    }
-
-    const isCorrectPassword = await bcrypt.compare(password, customer.password);
-    if (!isCorrectPassword) {
-      logger.error("wrong password");
-      return res.status(401).send({ message: "wrong password" });
-    }
-
-    const accessToken = generateAccessToken(
-      { _id: customer._id },
-      process.env.TOKEN_SECRET
-    );
-
-    let refreshToken = await UserToken.findOne({ userId: customer._id }).select(
-      "token"
-    );
-    if (!refreshToken) {
-      refreshToken = generateAccessToken(
-        { _id: customer._id },
-        process.env.TOKEN_SECRET,
-        "30d"
-      );
-    }
-
-    const userToken = await new UserToken({
-      userId: customer._id,
-      token: refreshToken,
-    }).save();
-
-    res.send({
-      message: "success",
-      userId: customer._id,
-      accessToken: accessToken,
-      refreshToken: refreshToken.token,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
 
 exports.getUserData = async (req, res, next) => {
   let customer;
@@ -135,6 +83,7 @@ exports.getUserData = async (req, res, next) => {
     following: customer.follows.length,
   });
 };
+
 exports.getUserWishList = async (req, res, next) => {
   let customer;
   try {

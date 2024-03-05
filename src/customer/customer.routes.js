@@ -1,9 +1,12 @@
 const express = require("express");
 
+const { body } = require("express-validator");
+
+const Customer = require("./customer.model");
 const customerController = require("./customer.controller");
 const { authenticateToken } = require("../common/jwt");
-const { body } = require("express-validator");
-const { validationMiddleware } = require("../common/utils");
+const { findOneUser, login } = require("../common/auth");
+const { validationMiddleware } = require("../common/middlewares");
 
 const router = express.Router();
 
@@ -20,7 +23,8 @@ router.post(
       .withMessage("invalid email"),
   ],
   validationMiddleware,
-  customerController.login
+  findOneUser(Customer),
+  login
 );
 
 // get user data
