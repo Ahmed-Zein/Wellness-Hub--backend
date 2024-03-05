@@ -2,7 +2,13 @@ const express = require("express");
 const { body } = require("express-validator");
 
 // Import controllers and middleware
-const mealController = require("./meal.contoller");
+const {
+  addMeal,
+  deleteOneMeal,
+  getAllMeals,
+  getMeal,
+  updateMeal,
+} = require("./meal.contoller");
 const reviewController = require("./reviews.controller");
 const { authenticateToken } = require("../common/jwt");
 const { ping, validationMiddleware } = require("../common/middlewares");
@@ -49,7 +55,7 @@ router.delete("/:mealId/reviews", authenticateToken, ping);
  * Get details of a specific meal by its ID.
  * Response: Meal object
  */
-router.get("/:mealId", mealController.getMeal);
+router.get("/:mealId", getMeal);
 
 /**
  * PUT /api/v1/meals/:mealId
@@ -58,7 +64,7 @@ router.get("/:mealId", mealController.getMeal);
  * Request Body: Updated meal details
  * Response: Updated meal object
  */
-router.put("/:mealId", authenticateToken, mealController.updateMeal);
+router.put("/:mealId", authenticateToken, updateMeal);
 
 /**
  * DELETE /api/v1/meals/:mealId
@@ -66,14 +72,14 @@ router.put("/:mealId", authenticateToken, mealController.updateMeal);
  * Requires authentication token and seller authorization.
  * Response: Success message
  */
-router.delete("/:mealId", authenticateToken, mealController.deleteOneMeal);
+router.delete("/:mealId", authenticateToken, deleteOneMeal);
 
 /**
  * GET /api/v1/meals
  * Get all meals.
  * Response: Array of meal objects
  */
-router.get("/", mealController.getAllMeals);
+router.get("/", getAllMeals);
 
 /**
  * POST /api/v1/meals
@@ -99,9 +105,10 @@ router.post(
     body("tags")
       .isArray({ min: MINIMUM_TAG_COUNT })
       .withMessage(`You should enter at least ${MINIMUM_TAG_COUNT} tag`),
+      body('quantity').isNumeric().isLength({min:1}).withMessage('Quantity should be at least 1')
   ],
   validationMiddleware,
-  mealController.addMeal
+  addMeal
 );
 
 module.exports = router;

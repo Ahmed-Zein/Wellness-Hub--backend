@@ -1,4 +1,6 @@
+const Seller = require("../seller/seller.model");
 const Meal = require("./meal.model");
+
 const logger = require("../common/logger");
 const { transformMealToClientFormat } = require("../common/utils");
 
@@ -27,7 +29,12 @@ exports.getMeal = async (req, res, next) => {
 };
 
 exports.addMeal = async (req, res, next) => {
-  if (req.body.seller !== req.user) {
+  const seller = await Seller.findById(req.user);
+  if (!seller) {
+    res.status(403);
+    next(Error("Unauthorized access: You are not a seller"));
+  }
+  if (req.body.seller !== seller._id.toString()) {
     logger.error("Seller id does not match current user id");
     res.status(403).json({
       message: "Unauthorized access: You are not the seller of this meal",
@@ -42,17 +49,25 @@ exports.addMeal = async (req, res, next) => {
     price: req.body.price,
     tags: req.body.tags,
     images: dummyImgs,
+    quantity: req.quantity,
   });
 
   try {
+    seller.meals.push(meal._id);
+    await seller.save();
+
     const newMeal = await meal.save();
+
+    console.log(meal);
     res.status(201).json({
-      ...transformMealToClientFormat(newMeal),
+      ...transformMealToClientFormat(meal),
       message: "Meal added successfully",
     });
   } catch (err) {
-    res.status(400);
-    next(Error("Invalid data provided for adding meal"));
+    if (!res.statusCode) {
+      res.status(400);
+    }
+    next(err);
   }
 };
 
@@ -104,7 +119,7 @@ exports.updateMeal = async (req, res, next) => {
       id: updatedMeal._id,
     });
   } catch (err) {
-    res.status(400);
+    if (!res.statusCode) res.status(400);
     next(Error("Invalid data provided for updating meal"));
   }
 };
@@ -112,5 +127,5 @@ exports.updateMeal = async (req, res, next) => {
 const dummyImgs = [
   "https://eb8e7f6d53.nxcli.net/wp-content/uploads/2018/05/Untitled2.png",
   "https://www.emaratalyoum.com/polopoly_fs/1.1613899.1648092935!/image/image.jpg",
-  'https://homechef.imgix.net/https%3A%2F%2Fasset.homechef.com%2Fuploads%2Fmeal%2Fplated%2F34178%2F821014.001.01SirloinSteakWithParsleyMustardButter_Ecomm_4_of_7_-02-07-23-082031.jpg?ixlib=rails-1.1.0&w=850&auto=format&s=da188132b36f42df1312a57e23a2bcee',
+  "https://homechef.imgix.net/https%3A%2F%2Fasset.homechef.com%2Fuploads%2Fmeal%2Fplated%2F34178%2F821014.001.01SirloinSteakWithParsleyMustardButter_Ecomm_4_of_7_-02-07-23-082031.jpg?ixlib=rails-1.1.0&w=850&auto=format&s=da188132b36f42df1312a57e23a2bcee",
 ];

@@ -3,9 +3,10 @@ exports.transformMealToClientFormat = (meal) => {
     id: meal._id,
     seller: meal.seller,
     title: meal.title,
-    images: meal.images,
+    address: "cairo",
     description: meal.description,
     tags: meal.tags,
+    images: meal.images,
     ingredients: [
       "Pizza dough",
       "Tomato sauce",
@@ -14,9 +15,9 @@ exports.transformMealToClientFormat = (meal) => {
       "Olive oil",
       "Salt and pepper to taste",
     ],
+    reviews: meal.reviews,
+    quantity: meal.quantity,
     rate: 3.4,
     price: meal.price,
-    address: "cairo",
-    reviews: meal.reviews.for,
   };
 };
