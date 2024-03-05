@@ -37,12 +37,15 @@ router.post("/register", async (req, res) => {
       address: address,
     });
 
-    // const token = this.newToken(user);
-    // res.status(201).send({ token });
-    const result = await seller.save();
+     await seller.save();
+    const accessToken = generateAccessToken(
+      { _id: seller._id },
+      process.env.TOKEN_SECRET
+    );
+
     res
       .status(201)
-      .send({ message: "success", userId: result._id, token: "dummydata" });
+      .send({ message: "success", userId: result._id, token:  accessToken});
   } catch (e) {
     console.error(e);
     res.status(500).send({ error: e.message });
