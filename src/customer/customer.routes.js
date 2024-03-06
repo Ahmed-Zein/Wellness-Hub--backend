@@ -22,7 +22,8 @@ router.post(
       .isLength({ min: 8 })
       .withMessage("name should be between 8 to 50 characters"),
     body("email").isEmail().withMessage("check you email"),
-  ],validationMiddleware,
+  ],
+  validationMiddleware,
   register
 );
 
