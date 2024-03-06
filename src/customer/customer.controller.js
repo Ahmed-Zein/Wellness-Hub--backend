@@ -4,6 +4,7 @@ const Customer = require("./customer.model");
 const UserToken = require("../models/user.token.model");
 const { generateAccessToken } = require("../common/jwt");
 const Logger = require("../common/logger");
+const logger = require("../common/logger");
 
 /**
  * @api {post} /api/v1/customer register new user
@@ -59,11 +60,11 @@ exports.register = async (req, res, next) => {
       refreshToken: refreshToken,
     });
   } catch (err) {
-    res.status(500);
-    next(err.message);
+    logger.error(err);
+    res.status(400);
+    next(err);
   }
 };
-
 
 exports.getUserData = async (req, res, next) => {
   let customer;
