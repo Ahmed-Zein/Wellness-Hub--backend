@@ -9,7 +9,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const customerRoute = require("./src/customer/customer.routes");
-const sellerRoute = require("./src/seller/seller.router");
+const sellerRoute = require("./src/seller/seller.routes");
 const productRoute = require("./src/product/product.routes");
 const mealsRoute = require("./src/meals/meal.routes");
 const orderRoute = require("./src/order/order.routes")
