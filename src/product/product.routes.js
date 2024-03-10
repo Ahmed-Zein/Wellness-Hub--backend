@@ -121,7 +121,7 @@ router.post("/:productId/rate", authenticateToken, async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    const newrate = { user_ID: req.body.user_ID, rate: req.body.rate };
+    const newrate = { user_ID: req.user, rate: req.body.rate };
     product.rate.push(newrate);
 
     await product.save();
