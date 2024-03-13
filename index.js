@@ -12,7 +12,7 @@ const customerRoute = require("./src/customer/customer.routes");
 const sellerRoute = require("./src/seller/seller.routes");
 const productRoute = require("./src/product/product.routes");
 const mealsRoute = require("./src/meals/meal.routes");
-const orderRoute = require("./src/order/order.routes")
+const orderRoute = require("./src/order/order.routes");
 const checkoutRoute = require("./src/checkout/stripe");
 const Logger = require("./src/common/logger");
 
@@ -45,3 +45,5 @@ mongoose.connect(process.env.MONGO_URI).then((result) => {
     console.log(">> server started on port:" + port);
   });
 });
+
+module.exports = app;
