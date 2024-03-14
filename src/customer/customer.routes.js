@@ -8,6 +8,7 @@ const {
   addToWishlist,
   getUserData,
   getUserWishList,
+  removeWishlist,
 } = require("./customer.controller");
 const { authenticateToken } = require("../common/jwt");
 const { findOneUser, login } = require("../common/auth");
@@ -48,7 +49,14 @@ router.get("/:userId", authenticateToken, getUserData);
 // get user wishlist
 router.get("/:userId/wishlist", authenticateToken, getUserWishList);
 
-// TODO: add to user wishlist
+//  add to user wishlist
 router.post("/:userId/wishlist/:productId", authenticateToken, addToWishlist);
+
+// remove from user wishlist
+router.delete(
+  "/:userId/wishlist/:productId",
+  authenticateToken,
+  removeWishlist
+);
 
 module.exports = router;
