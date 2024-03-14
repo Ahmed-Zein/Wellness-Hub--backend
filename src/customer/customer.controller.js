@@ -1,10 +1,13 @@
 const bcrypt = require("bcryptjs");
 
+const Meal = require("../meals/meal.model");
+const Product = require("../product/product.model");
 const Customer = require("./customer.model");
 const UserToken = require("../models/user.token.model");
-const { generateAccessToken } = require("../common/jwt");
-const Logger = require("../common/logger");
+
 const logger = require("../common/logger");
+const { generateAccessToken } = require("../common/jwt");
+const { fetchItemsByIds } = require("../common/utils");
 
 /**
  * @api {post} /api/v1/customer register new user
@@ -72,7 +75,7 @@ exports.getUserData = async (req, res, next) => {
     customer = await Customer.findById(req.params.userId);
     if (!customer) throw Error("user id not found");
   } catch (err) {
-    Logger.error(err);
+    logger.error(err);
     res.status(404).json({ message: err.message }).end();
     return;
   }
@@ -85,39 +88,44 @@ exports.getUserData = async (req, res, next) => {
   });
 };
 
-exports.getUserWishList = async (req, res, next) => {
-  let customer;
-  try {
-    customer = await Customer.findById(req.params.userId);
-    if (!customer) throw Error("user id not found");
-  } catch (err) {
-    Logger.error(err);
-    res.status(404).json({ message: err.message }).end();
-    return;
-  }
-  res.json({
-    message: "success",
-    wishlist: customer.wishlist,
-  });
-};
+exports.getUserWishList = [
+  async (req, res, next) => {
+    let customer;
+    try {
+      customer = await Customer.findById(req.params.userId);
+      if (!customer) throw Error("user id not found");
+    } catch (err) {
+      res.status(404);
+      next(err);
+      return;
+    }
+    req.wishlist = customer.wishlist;
+    next();
+  },
+  fetchItemsByIds,
+];
 
 exports.addToWishlist = async (req, res, next) => {
+  const { userId, productId } = req.params;
   let customer;
   let product;
   try {
-    customer = await Customer.findById(req.params.userId);
-    if (!customer) throw Error("user not found");
-    console.log(req.params);
-    product = await Product.findById(req.params.productId);
+    customer = await Customer.findById(userId);
+    if (!customer) throw Error("customer not found");
+
+    console.log(productId);
+    product = await Product.findById(productId);
     if (!product) {
-      product = await Meal.findById(req.params.productId);
+      product = await Meal.findById(productId);
       if (!product) throw Error("item id not found");
     }
+
+    customer.wishlist.push(product._id);
+    customer.save();
+    res.status(200).json({ message: "success" });
   } catch (err) {
-    Logger.error(err);
-    res.status(404).json({ message: err.message }).end();
+    res.status(404);
+    next(err);
     return;
   }
-  customer.wishlist.addToSet();
-  res.status(200).json({ message: "success" });
 };

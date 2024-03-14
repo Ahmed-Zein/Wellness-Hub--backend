@@ -69,14 +69,18 @@ const customerSchema = new Schema({
   //       },
   //     },
   //   ],
-  wishlist:[
-      {
-          productId:{
-          type: Schema.Types.ObjectId,
-          ref: "Product",
-          // required: true,
-        },
-      }
+  wishlist: [
+    {
+      products: {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+        // required: true,
+      },
+      meals: {
+        type: Schema.Types.ObjectId,
+        ref: "Meal",
+      },
+    },
   ],
 });
 
