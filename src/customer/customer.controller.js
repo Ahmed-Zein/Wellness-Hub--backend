@@ -113,7 +113,6 @@ exports.addToWishlist = async (req, res, next) => {
     customer = await Customer.findById(userId);
     if (!customer) throw Error("customer not found");
 
-    console.log(productId);
     product = await Product.findById(productId);
     if (!product) {
       product = await Meal.findById(productId);
