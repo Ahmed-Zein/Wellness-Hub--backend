@@ -16,7 +16,7 @@ const logger = require("./src/common/logger");
 app.disable("x-powered-by");
 
 app.use(cors());
-app.use(morgan("short"));
+app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
