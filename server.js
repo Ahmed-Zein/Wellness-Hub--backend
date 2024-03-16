@@ -1,8 +1,5 @@
-require("dotenv").config();
-
-const mongoose = require("mongoose");
 const express = require("express");
-const logger = require("morgan");
+const morgan = require("morgan");
 const app = express();
 
 const bodyParser = require("body-parser");
@@ -14,12 +11,12 @@ const productRoute = require("./src/product/product.routes");
 const mealsRoute = require("./src/meals/meal.routes");
 const orderRoute = require("./src/order/order.routes");
 const checkoutRoute = require("./src/checkout/stripe");
-const Logger = require("./src/common/logger");
+const logger = require("./src/common/logger");
 
 app.disable("x-powered-by");
 
 app.use(cors());
-app.use(logger("short"));
+app.use(morgan("short"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -35,15 +32,8 @@ app.use("/api/v1/orders", orderRoute);
 app.use("/api/v1/checkout", checkoutRoute);
 
 app.use((err, req, res, next) => {
-  Logger.error(err);
+  logger.error(err);
   res.send({ error: err.message });
-});
-
-const port = process.env.PORT || 3000;
-mongoose.connect(process.env.MONGO_URI).then((result) => {
-  app.listen(port, () => {
-    console.log(">> server started on port:" + port);
-  });
 });
 
 module.exports = app;
