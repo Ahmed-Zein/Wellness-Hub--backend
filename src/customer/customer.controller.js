@@ -20,18 +20,16 @@ const { fetchItemsByIds } = require("../common/utils");
  * @apiSuccess (200) {Object} mixed `User` object
  */
 exports.register = async (req, res, next) => {
-  const { name, email, password, phone, address } = req.body;
-
-  if (!(name && email && password && phone))
-    return res.status(400).send({ message: "missing data" });
+  const { name, email, password, phone,  address } = req.body;
 
   try {
     const alreadyExists = await Customer.findOne({ email: email }).exec();
     if (alreadyExists) {
-      return res.status(409).send({ message: "user already exists" });
+      res.status(409);
+      throw Error("user already exists");
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hashu(password, 12);
     if (!hashedPassword) throw Error("server error");
     const customer = await Customer.create({
       name: name,
@@ -63,8 +61,7 @@ exports.register = async (req, res, next) => {
       refreshToken: refreshToken,
     });
   } catch (err) {
-    logger.error(err);
-    res.status(400);
+    res.status(res.statusCode || 500);
     next(err);
   }
 };
