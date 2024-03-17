@@ -113,6 +113,11 @@ exports.addToWishlist = async (req, res, next) => {
     customer = await Customer.findById(userId);
     if (!customer) throw Error("customer not found");
 
+    if (customer.wishlist.find((e) => e._id.toString() === productId)) {
+      res.status(409);
+      throw Error("the item is already in the wishlist");
+    }
+
     product = await Product.findById(productId);
     if (!product) {
       product = await Meal.findById(productId);
@@ -123,8 +128,27 @@ exports.addToWishlist = async (req, res, next) => {
     customer.save();
     res.status(200).json({ message: "success" });
   } catch (err) {
-    res.status(404);
+    if (!res.statusCode) res.status(404);
     next(err);
     return;
+  }
+};
+
+exports.removeWishlist = async (req, res, next) => {
+  const { userId, productId } = req.params;
+  let customer;
+  try {
+    customer = await Customer.findById(userId);
+    if (!customer) throw Error("customer not found");
+
+    console.log(customer.wishlist);
+    customer.wishlist = customer.wishlist.filter(
+      (itemId) => itemId._id.toString() !== productId
+    );
+    customer.save();
+    res.status(200).json({ message: "success" });
+  } catch (err) {
+    res.status(404);
+    next(err);
   }
 };
