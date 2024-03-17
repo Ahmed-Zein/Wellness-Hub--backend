@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const Meal = require("../meals/meal.model");
 const Product = require("../product/product.model");
 const Customer = require("./customer.model");
-const UserToken = require("../models/user.token.model");
+// const UserToken = require("../models/user.token.model");
 
 const logger = require("../common/logger");
 const { generateAccessToken } = require("../common/jwt");
@@ -29,7 +29,7 @@ exports.register = async (req, res, next) => {
       throw Error("user already exists");
     }
 
-    const hashedPassword = await bcrypt.hashu(password, 12);
+    const hashedPassword = await bcrypt.hash(password, 12);
     if (!hashedPassword) throw Error("server error");
     const customer = await Customer.create({
       name: name,
@@ -51,8 +51,6 @@ exports.register = async (req, res, next) => {
       process.env.TOKEN_SECRET,
       "30d"
     );
-
-    await new UserToken({ userId: customer._id, token: refreshToken }).save();
 
     res.status(201).send({
       message: "success",
