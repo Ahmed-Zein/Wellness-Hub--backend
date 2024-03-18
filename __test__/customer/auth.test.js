@@ -10,15 +10,14 @@ const logger = require("../../src/common/logger");
 
 beforeAll(async () => {
   await mongoose.connect(process.env.MONGO_URI);
-}, 5000000);
+}, 90000000);
 
 afterAll(async () => {
   await mongoose.connection.close();
 });
 
 describe("JWT:", () => {
-  describe("newToken", () => {
-    test("creates new jwt from userid", () => {
+    test("should create new jwt", () => {
       const id = 123;
       const payload = { id: 123 };
       const token = generateAccessToken(payload, process.env.TOKEN_SECRET);
@@ -26,11 +25,10 @@ describe("JWT:", () => {
 
       expect(accessToken.id).toBe(id);
     });
-  });
 });
 
 describe("Authentication:", () => {
-  it("registering with existing email fails with 409 ", async () => {
+  it("should fail due to registering with existing email", async () => {
     const body = {
       name: "sdfsfdsa",
       email: "test279@test.com",
@@ -44,7 +42,7 @@ describe("Authentication:", () => {
     const res = await request(app).post("/api/v1/customer/register").send(body);
     expect(res.status).toBe(409);
   });
-  it("registering sucessfully", async () => {
+  it("should register successfully", async () => {
     const body = {
       name: "sdfsfdsa",
       email: "test279xx" + Math.random() + "@test.com",
@@ -58,9 +56,24 @@ describe("Authentication:", () => {
     const res = await request(app).post("/api/v1/customer/register").send(body);
     expect(res.status).toBe(201);
   });
-  it("registering with missing data", async () => {
+  it("should fail registering with missing data", async () => {
     const body = {};
     const res = await request(app).post("/api/v1/customer/register").send(body);
     expect(res.status).toBe(422);
+  });
+  it("should log-in customers", async () => {
+    const body = { email: "test279@test.com", password: "123456789" };
+    const res = await request(app).post("/api/v1/customer/login").send(body);
+    expect(res.status).toBe(200);
+  });
+  it("should fail due to wrong password", async () => {
+    const body = { email: "test279@test.com", password: "1xxxxxx89" };
+    const res = await request(app).post("/api/v1/customer/login").send(body);
+    expect(res.status).toBe(401);
+  });
+  it("should fail due to unregisterd email", async () => {
+    const body = { email: "txxxxx9@test.com", password: "1xxxxxx89" };
+    const res = await request(app).post("/api/v1/customer/login").send(body);
+    expect(res.status).toBe(404);
   });
 });
