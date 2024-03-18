@@ -13,26 +13,25 @@ exports.findOneUser = (UserType) => {
       req.user = user;
       next();
     } catch (err) {
-      Logger.error(err);
-      res.status(404).json({ message: err.message }).end();
-      return;
+      res.status(500);
+      next(err);
     }
   };
 };
 
 exports.login = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { password } = req.body;
 
   try {
     if (!req.user) {
-      Logger.error("email: " + email + " no exist");
-      return res.status(401).send({ message: "email not exist" });
+      res.status(404);
+      throw Error("email does not exist");
     }
 
     const isCorrectPassword = await bcrypt.compare(password, req.user.password);
     if (!isCorrectPassword) {
-      Logger.error("wrong password");
-      return res.status(401).send({ message: "wrong password" });
+      res.status(401);
+      throw Error("wrong password");
     }
 
     const accessToken = generateAccessToken(
@@ -55,6 +54,7 @@ exports.login = async (req, res, next) => {
       refreshToken: refreshToken.token,
     });
   } catch (err) {
+    res.status(res.statusCode || 500);
     next(err);
   }
 };
