@@ -9,7 +9,6 @@ exports.validationMiddleware = (req, res, next) => {
   }
   const extractedErrors = [];
   errors.array().map((err) => {
-    logger.error(err.msg);
     extractedErrors.push({ [err.path]: err.msg });
   });
 
