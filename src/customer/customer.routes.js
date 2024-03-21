@@ -10,6 +10,7 @@ const {
   getUserWishList,
   removeWishlist,
 } = require("./customer.controller");
+const { getCart, addToCart, deleteFromCart } = require("./cart.controller");
 const { authenticateToken } = require("../common/jwt");
 const { findOneUser, login } = require("../common/auth");
 const { validationMiddleware } = require("../common/middlewares");
@@ -59,5 +60,21 @@ router.delete(
   authenticateToken,
   removeWishlist
 );
+
+router.get("/:userId/cart", authenticateToken, getCart);
+router.post(
+  "/:userId/cart",
+  authenticateToken,
+  [
+    body("itemId").exists().withMessage("item id is required"),
+    body("quantity")
+      .exists()
+      .isInt({ min: 0, max: 100 })
+      .withMessage("quantity is required"),
+  ],
+  validationMiddleware,
+  addToCart
+);
+router.delete("/:userId/cart", authenticateToken, deleteFromCart);
 
 module.exports = router;

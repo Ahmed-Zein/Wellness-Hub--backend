@@ -82,6 +82,18 @@ const customerSchema = new Schema({
       },
     },
   ],
+  cart: [
+    {
+      itemId: {
+        type: Schema.Types.ObjectId,
+        required: true,
+      },
+      quantity: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
 });
 
 module.exports = mongoose.model("Customer", customerSchema);
