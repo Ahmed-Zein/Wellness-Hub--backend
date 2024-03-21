@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
 
 const { generateAccessToken } = require("../common/jwt");
-const Logger = require("../common/logger");
 
 exports.findOneUser = (UserType) => {
   return async (req, res, next) => {
@@ -39,19 +38,11 @@ exports.login = async (req, res, next) => {
       process.env.TOKEN_SECRET
     );
 
-    if (!refreshToken) {
-      refreshToken = generateAccessToken(
-        { _id: req.user._id },
-        process.env.TOKEN_SECRET,
-        "30d"
-      );
-    }
-
     res.send({
       message: "success",
       userId: req.user._id,
       accessToken: accessToken,
-      refreshToken: refreshToken.token,
+      refreshToken: accessToken,
     });
   } catch (err) {
     res.status(res.statusCode || 500);
