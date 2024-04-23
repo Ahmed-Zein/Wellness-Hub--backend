@@ -20,10 +20,14 @@ app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.get("/helloworld", (req, res) => {
+  res.send("<h1>Hello World!!</h1>");
+});
 app.get("/", (req, res) => {
   res.send("<h1>WellnessHub</h1>");
 });
 
+/* ROUTES */
 app.use("/api/v1/customer", customerRoute);
 app.use("/api/v1/seller", sellerRoute);
 app.use("/api/v1/products", productRoute);
