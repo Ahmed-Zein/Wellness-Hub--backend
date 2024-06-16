@@ -8,7 +8,9 @@ const app = require("../../server");
 const userId = "65d249efb0caf340385285fb";
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGO_URI);
+  const mongoServer = await MongoMemoryServer.create();
+  const uri = mongoServer.getUri();
+  await mongoose.connect(uri);
 }, 90000000);
 
 afterAll(async () => {
