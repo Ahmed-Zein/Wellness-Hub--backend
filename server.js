@@ -36,7 +36,7 @@ app.use("/api/v1/orders", orderRoute);
 app.use("/api/v1/checkout", checkoutRoute);
 
 app.use((err, req, res, next) => {
-  logger.error(err);
+  // logger.error(err);
   res.send({ error: err.message });
 });
 

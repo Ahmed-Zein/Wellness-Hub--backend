@@ -5,20 +5,36 @@ const request = require("supertest");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
+let mongoServer;
 const app = require("../../server");
 const { generateAccessToken } = require("../../src/common/jwt");
 
-const testEmail = "test279xx" + Math.random() + "@test.com";
-const validPass = "123456789";
+const testUser = {
+  name: "John Doe",
+  email: "test.user@example.com",
+  password: "secure_password123",
+  address: "123 Main St",
+  phone: {
+    countryCode: "+1",
+    number: "555-555-5555",
+  },
+};
 
 beforeAll(async () => {
-  const mongoServer = await MongoMemoryServer.create();
+  mongoServer = await MongoMemoryServer.create();
   const uri = mongoServer.getUri();
   await mongoose.connect(uri);
-}, 90000000);
+});
+
+afterEach(async () => {
+  await mongoose.connection.dropDatabase();
+});
 
 afterAll(async () => {
   await mongoose.connection.close();
+  if (mongoServer) {
+    mongoServer.stop();
+  }
 });
 
 describe("JWT:", () => {
@@ -32,32 +48,16 @@ describe("JWT:", () => {
 });
 
 describe("Authentication:", () => {
-  it("should register successfully", async () => {
-    const body = {
-      name: "sdfsfdsa",
-      email: testEmail,
-      password: validPass,
-      address: "placeholder",
-      phone: {
-        countryCode: "+020",
-        number: "01010101010",
-      },
-    };
-    const res = await request(app).post("/api/v1/customer/register").send(body);
+  beforeEach(async () => {
+    const res = await request(app)
+      .post("/api/v1/customer/register")
+      .send(testUser);
     expect(res.status).toBe(201);
   });
   it("should fail due to registering with existing email", async () => {
-    const body = {
-      name: "sdfsfdsa",
-      email: testEmail,
-      password: validPass,
-      address: "placeholder",
-      phone: {
-        countryCode: "+020",
-        number: "01010101010",
-      },
-    };
-    const res = await request(app).post("/api/v1/customer/register").send(body);
+    const res = await request(app)
+      .post("/api/v1/customer/register")
+      .send(testUser);
     expect(res.status).toBe(409);
   });
   it("should fail registering with missing data", async () => {
@@ -66,12 +66,12 @@ describe("Authentication:", () => {
     expect(res.status).toBe(422);
   });
   it("should log-in customers", async () => {
-    const body = { email: testEmail, password: "123456789" };
+    const body = { email: testUser.email, password: testUser.password };
     const res = await request(app).post("/api/v1/customer/login").send(body);
     expect(res.status).toBe(200);
   });
   it("should fail due to wrong password", async () => {
-    const body = { email: testEmail, password: "wrongpassword" };
+    const body = { email: testUser.email, password: "wrongpassword" };
     const res = await request(app).post("/api/v1/customer/login").send(body);
     expect(res.status).toBe(401);
   });
