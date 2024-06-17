@@ -2,6 +2,9 @@ const jwt = require("jsonwebtoken");
 const logger = require("./logger");
 
 exports.generateAccessToken = (payload, key, expiresIn) => {
+  console.log(payload);
+  console.log(key);
+  console.log(expiresIn);
   if (!key) {
     throw Error("Empty key");
   }

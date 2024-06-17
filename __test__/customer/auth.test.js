@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const jwt = require("jsonwebtoken");
 const request = require("supertest");
 const mongoose = require("mongoose");
@@ -41,8 +39,9 @@ describe("JWT:", () => {
   test("should create new jwt", () => {
     const id = 123;
     const payload = { id: 123 };
-    const token = generateAccessToken(payload, process.env.TOKEN_SECRET);
-    const accessToken = jwt.verify(token, process.env.TOKEN_SECRET);
+    const mockSecret = "shhh!_test_secret";
+    const token = generateAccessToken(payload, mockSecret);
+    const accessToken = jwt.verify(token, mockSecret);
     expect(accessToken.id).toBe(id);
   });
 });
