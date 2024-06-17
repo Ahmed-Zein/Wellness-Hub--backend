@@ -20,7 +20,7 @@ const { fetchItemsByIds } = require("../common/utils");
  * @apiSuccess (200) {Object} mixed `User` object
  */
 exports.register = async (req, res, next) => {
-  const { name, email, password, phone,  address } = req.body;
+  const { name, email, password, phone, address } = req.body;
 
   try {
     const alreadyExists = await Customer.findOne({ email: email }).exec();
