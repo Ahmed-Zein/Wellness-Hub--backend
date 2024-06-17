@@ -1,7 +1,14 @@
+const config = require("config");
 const jwt = require("jsonwebtoken");
+
 const logger = require("./logger");
 
+const token = config.get("TOKEN_SECRET");
+
 exports.generateAccessToken = (payload, key, expiresIn) => {
+  // NOTE: this an intermediary solution before refactoring the function api
+  // TODO: key in the function parameters remove it!
+  key = token;
   if (!key) {
     throw Error("Empty key");
   }
@@ -16,7 +23,7 @@ exports.authenticateToken = (req, res, next) => {
 
   if (token == null) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+  jwt.verify(token, token, (err, user) => {
     if (err) {
       logger.error("jwt error: " + err);
       res.sendStatus(403).end();

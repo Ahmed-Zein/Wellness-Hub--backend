@@ -1,13 +1,14 @@
-require("dotenv").config();
-
+const config = require("config");
 const jwt = require("jsonwebtoken");
 const request = require("supertest");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
-let mongoServer;
 const app = require("../../server");
 const { generateAccessToken } = require("../../src/common/jwt");
+
+let mongoServer;
+const test_token = config.get("TOKEN_SECRET");
 
 const testUser = {
   name: "John Doe",
@@ -38,11 +39,12 @@ afterAll(async () => {
 });
 
 describe("JWT:", () => {
-  test("should create new jwt", () => {
+  ("should create new jwt", () => {
     const id = 123;
     const payload = { id: 123 };
-    const token = generateAccessToken(payload, process.env.TOKEN_SECRET);
-    const accessToken = jwt.verify(token, process.env.TOKEN_SECRET);
+    const mockSecret = "shhh!_test_secret";
+    const token = generateAccessToken(payload);
+    const accessToken = jwt.verify(token, test_token);
     expect(accessToken.id).toBe(id);
   });
 });
