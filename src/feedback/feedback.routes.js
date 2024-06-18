@@ -3,7 +3,7 @@ const router = express.Router();
 const Feedback = require("./feedback.model");
 const { authenticateToken } = require("../common/jwt"); //imported the authenticate token
 
-// GET /products: endpoint to  Get a list of all products. /
+// GET /feedback: endpoint to  Get a list of all feedbacks. /
 router.get("/", async (req, res) => {
   try {
     const feedbacks = await Feedback.find();
@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 
 
 
-// POST /products: endpoint to Create a new product.
+// POST /feedback: endpoint to Create a new feedback.
 router.post("/", authenticateToken, async (req, res) => {
     try {
       console.log("Feedback Function...");
