@@ -20,6 +20,7 @@ exports.getMeal = async (req, res, next) => {
     const meal = await Meal.findById(req.params.mealId);
     if (!meal) {
       res.status(404).json({ message: "Meal not found" });
+      return;
     }
     res.json(transformMealToClientFormat(meal));
   } catch (err) {
