@@ -6,7 +6,8 @@
   "scripts": {
     "test": " NODE_ENV=test jest",
     "gg": "jest --clearCache",
-    "start": " NODE_ENV=dev nodemon app.js"
+    "start": "NODE_ENV=dev nodemon app.js",
+    "prod": "NODE_ENV=dev node app.js"
   },
   "keywords": [],
   "author": "",
