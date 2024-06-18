@@ -12,6 +12,8 @@ const mealsRoute = require("./src/meals/meal.routes");
 const orderRoute = require("./src/order/order.routes");
 const checkoutRoute = require("./src/checkout/stripe");
 const logger = require("./src/common/logger");
+const recipeRoute = require("./src/recipes/recipe.routes");
+const feedbackRoute = require("./src/feedback/feedback.routes");
 
 app.disable("x-powered-by");
 
@@ -34,6 +36,9 @@ app.use("/api/v1/products", productRoute);
 app.use("/api/v1/meals", mealsRoute);
 app.use("/api/v1/orders", orderRoute);
 app.use("/api/v1/checkout", checkoutRoute);
+app.use("/api/v1/recipies", recipeRoute);
+app.use("/api/v1/feedback", feedbackRoute);
+
 
 app.use((err, req, res, next) => {
   // logger.error(err);
