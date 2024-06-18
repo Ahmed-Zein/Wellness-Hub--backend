@@ -10,6 +10,7 @@ const { generateAccessToken } = require("../../src/common/jwt");
 let mongoServer;
 const test_token = config.get("TOKEN_SECRET");
 
+
 const testUser = {
   name: "John Doe",
   email: "test.user@example.com",
@@ -39,10 +40,9 @@ afterAll(async () => {
 });
 
 describe("JWT:", () => {
-  ("should create new jwt", () => {
+  it("should create new jwt", () => {
     const id = 123;
     const payload = { id: 123 };
-    const mockSecret = "shhh!_test_secret";
     const token = generateAccessToken(payload);
     const accessToken = jwt.verify(token, test_token);
     expect(accessToken.id).toBe(id);

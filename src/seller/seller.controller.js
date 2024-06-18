@@ -36,7 +36,7 @@ exports.register = async (req, res) => {
     logger.info("seller registerd successfully");
     res.status(201).send({
       message: "seller registerd successfully",
-      userId: result._id,
+      userId: seller._id,
       token: accessToken,
     });
   } catch (e) {
