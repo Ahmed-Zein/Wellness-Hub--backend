@@ -6,7 +6,7 @@ const eventSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: {
             type: String,
-            enum:['Customer', 'Seller']
+            enum:['customer', 'seller']
         },
         required: true 
     },
@@ -26,7 +26,7 @@ const eventSchema = new mongoose.Schema({
         userID: {
             type: mongoose.Schema.Types.ObjectId, 
             ref: {
-                enum:['Customer', 'Seller']
+                enum:['customer', 'seller']
             }
            } 
     }],
