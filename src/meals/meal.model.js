@@ -2,21 +2,21 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const categories = {
-  appetizers: "appetizers",
-  breakfastFoods: "breakfastFoods",
-  desserts: "desserts",
-  drinks: "drinks",
-  mostlyMeat: "mostlyMeat",
-  proteinShakes: "proteinShakes",
-  salads: "salads",
-  sandwiches: "sandwiches",
-  pasta: "pasta",
-  soups: "soups",
-  other: "other",
-  mainDishes: "mainDishes",
-  sideDishes: "sideDishes",
-};
+const categories = [
+  "appetizers",
+  "breakfastFoods",
+  "desserts",
+  "drinks",
+  "mostlyMeat",
+  "proteinShakes",
+  "salads",
+  "sandwiches",
+  "pasta",
+  "soups",
+  "other",
+  "mainDishes",
+  "sideDishes",
+];
 
 const mealSchema = new Schema({
   seller: { type: Schema.Types.ObjectId, ref: "Seller", required: true },
@@ -26,9 +26,10 @@ const mealSchema = new Schema({
     type: String,
     required: true,
   },
-  type: { type: String, enum: categories, required: true },
+  category: { type: String, enum: categories, required: true },
   price: { type: Number, float: true, required: true },
   tags: [String],
+  ingredients: [String],
   reviews: [
     {
       customer: {

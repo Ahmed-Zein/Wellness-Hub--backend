@@ -6,7 +6,7 @@ const { transformMealToClientFormat } = require("../common/utils");
 
 exports.getAllMeals = async (req, res, next) => {
   try {
-    const meals = await Meal.find();
+    const meals = (await Meal.find()).reverse();
     const formattedMeals = meals.map(transformMealToClientFormat);
     res.status(200).json(formattedMeals);
   } catch (err) {
@@ -42,22 +42,13 @@ exports.addMeal = async (req, res, next) => {
     return;
   }
 
-  const meal = new Meal({
-    seller: req.user,
-    title: req.body.title,
-    description: req.body.description,
-    price: req.body.price,
-    tags: req.body.tags,
-    images: dummyImgs,
-  });
-
+  const meal = new Meal(req.body);
   try {
     seller.meals.push(meal._id);
     await seller.save();
 
     const newMeal = await meal.save();
 
-    console.log(meal);
     res.status(201).json({
       ...transformMealToClientFormat(meal),
       message: "Meal added successfully",

@@ -21,6 +21,21 @@ const MINIMUM_TITLE_LENGTH = 3;
 const MINIMUM_DESCRIPTION_LENGTH = 3;
 const MINIMUM_TAG_COUNT = 1;
 
+const categories = [
+  "appetizers",
+  "breakfastFoods",
+  "desserts",
+  "drinks",
+  "mostlyMeat",
+  "proteinShakes",
+  "salads",
+  "sandwiches",
+  "pasta",
+  "soups",
+  "other",
+  "mainDishes",
+  "sideDishes",
+];
 // Reviews endpoints
 
 /**
@@ -105,6 +120,7 @@ router.post(
     body("tags")
       .isArray({ min: MINIMUM_TAG_COUNT })
       .withMessage(`You should enter at least ${MINIMUM_TAG_COUNT} tag`),
+    body("category").isIn(categories).withMessage("Invalid meal type"),
   ],
   validationMiddleware,
   addMeal
