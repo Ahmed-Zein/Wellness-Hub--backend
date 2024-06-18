@@ -3,16 +3,14 @@ const jwt = require("jsonwebtoken");
 
 const logger = require("./logger");
 
-const token = config.get("TOKEN_SECRET");
+const TOKEN_SECRET = config.get("TOKEN_SECRET");
 
-exports.generateAccessToken = (payload, key, expiresIn) => {
-  // NOTE: this an intermediary solution before refactoring the function api
-  // TODO: key in the function parameters remove it!
-  key = token;
-  if (!key) {
+exports.generateAccessToken = (payload, expiresIn) => {
+
+  if (!TOKEN_SECRET) {
     throw Error("Empty key");
   }
-  return jwt.sign(payload, key, {
+  return jwt.sign(payload, TOKEN_SECRET, {
     expiresIn: expiresIn || "30d",
   });
 };
@@ -23,7 +21,7 @@ exports.authenticateToken = (req, res, next) => {
 
   if (token == null) return res.sendStatus(401);
 
-  jwt.verify(token, token, (err, user) => {
+  jwt.verify(token, TOKEN_SECRET, (err, user) => {
     if (err) {
       logger.error("jwt error: " + err);
       res.sendStatus(403).end();

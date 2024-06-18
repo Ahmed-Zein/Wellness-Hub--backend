@@ -33,10 +33,7 @@ exports.login = async (req, res, next) => {
       throw Error("wrong password");
     }
 
-    const accessToken = generateAccessToken(
-      { _id: req.user._id },
-      process.env.TOKEN_SECRET
-    );
+    const accessToken = generateAccessToken({ _id: req.user._id });
 
     res.send({
       message: "success",

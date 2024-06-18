@@ -28,10 +28,7 @@ exports.register = async (req, res) => {
     });
 
     await seller.save();
-    const accessToken = generateAccessToken(
-      { _id: seller._id },
-      process.env.TOKEN_SECRET
-    );
+    const accessToken = generateAccessToken({ _id: seller._id });
 
     logger.info("seller registerd successfully");
     res.status(201).send({
