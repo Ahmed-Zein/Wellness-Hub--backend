@@ -28,6 +28,6 @@ router.post(
 );
 
 // Get /sellers  endpoint to get the data of a specific  seller
-router.get("/:sellerId", authenticateToken, getSellerData);
+router.get("/:sellerId", getSellerData);
 
 module.exports = router;
