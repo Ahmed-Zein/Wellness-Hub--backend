@@ -41,10 +41,12 @@ app.use("/api/v1/recipies", recipeRoute);
 app.use("/api/v1/feedback", feedbackRoute);
 app.use("/api/v1/event", eventRoute);
 
-
 app.use((err, req, res, next) => {
-  // logger.error(err);
-  res.send({ error: err.message });
+  const statusCode = err.statusCode || res.statusCode || 500;
+  logger.error(
+    ` message: ${err.message}, code: ${statusCode}, type: ${err.type || "na"}`
+  );
+  res.status(statusCode).send({ error: err.message });
 });
 
 module.exports = app;

@@ -6,4 +6,6 @@ ErrorTypes.ServerError = "Server Error";
 
 ErrorTypes.UnAuthorizedAccess = "unauthorized access Error";
 
-ErrorTypes.NotFound = "Not found Error";
+ErrorTypes.NotFoundError = "Not found Error";
+
+ErrorTypes.BadRequestError = "Bad Request";

@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs");
 
 const { generateAccessToken } = require("../common/jwt");
+const CustomError = require("../errors/customerError");
+const { AuthError, UnAuthorizedAccess } = require("../errors/error-types");
 
 exports.findOneUser = (UserType) => {
   return async (req, res, next) => {
@@ -23,14 +25,12 @@ exports.login = async (req, res, next) => {
 
   try {
     if (!req.user) {
-      res.status(404);
-      throw Error("email does not exist");
+      throw new CustomError("email does not exist", AuthError, 404);
     }
 
     const isCorrectPassword = await bcrypt.compare(password, req.user.password);
     if (!isCorrectPassword) {
-      res.status(401);
-      throw Error("wrong password");
+      throw new CustomError("wrong password", UnAuthorizedAccess, 401);
     }
 
     const accessToken = generateAccessToken({ _id: req.user._id });

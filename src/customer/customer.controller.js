@@ -11,6 +11,14 @@ const {
   fetchItemsByIds,
   transformMealToClientFormat,
 } = require("../common/utils");
+const CustomError = require("../errors/customerError");
+const {
+  AuthError,
+  ServerError,
+  NotFoundError,
+  BadRequestError,
+} = require("../errors/error-types");
+const customerModel = require("./customer.model");
 
 /**
  * @api {post} /api/v1/customer register new user
@@ -28,12 +36,12 @@ exports.register = async (req, res, next) => {
   try {
     const alreadyExists = await Customer.findOne({ email: email }).exec();
     if (alreadyExists) {
-      res.status(409);
-      throw Error("user already exists");
+      throw new CustomError("user already exists", AuthError, 409);
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    if (!hashedPassword) throw Error("server error");
+    if (!hashedPassword)
+      throw new CustomError("something went wrong", ServerError, 500);
     const customer = await Customer.create({
       name: name,
       email: email,
@@ -55,7 +63,6 @@ exports.register = async (req, res, next) => {
       refreshToken: refreshToken,
     });
   } catch (err) {
-    res.status(res.statusCode || 500);
     next(err);
   }
 };
@@ -149,8 +156,9 @@ exports.getWeeklyPlan = async (req, res, next) => {
   let customer;
   try {
     customer = await Customer.findById(userId, { weekplan: 1, _id: 0 });
-    if (!customer) throw Error("customer not found");
-    console.log(customer);
+    if (!customer) {
+      throw new CustomError("customer not found", NotFoundError, 404);
+    }
     let { weekplan } = customer;
     weekplan = weekplan.map((day) => {
       day.breakfast = day.breakfast.map(async (m) =>
@@ -162,7 +170,6 @@ exports.getWeeklyPlan = async (req, res, next) => {
     });
     res.status(200).json({ weekplan });
   } catch (err) {
-    res.status(404);
     next(err);
   }
 };
@@ -173,7 +180,7 @@ exports.addWeeklyPlan = async (req, res, next) => {
     const { weekplan } = req.body;
 
     if (!weekplan || !Array.isArray(weekplan)) {
-      return res.status(400).json({ message: "Invalid weekplan data" });
+      throw new CustomError("Cusomter not found", BadRequestError, 400);
     }
 
     const customer = await Customer.findByIdAndUpdate(
@@ -183,15 +190,14 @@ exports.addWeeklyPlan = async (req, res, next) => {
     );
 
     if (!customer) {
-      return res.status(404).json({ message: "Customer not found" });
+      throw new CustomError("Cusomter not found", NotFoundError, 404);
     }
 
     res.status(200).json({
       message: "Weekplan added successfully",
       weekplan: customer.weekplan,
     });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+  } catch (err) {
+    next(err);
   }
 };
