@@ -14,6 +14,7 @@ const checkoutRoute = require("./src/checkout/stripe");
 const logger = require("./src/common/logger");
 const recipeRoute = require("./src/recipes/recipe.routes");
 const feedbackRoute = require("./src/feedback/feedback.routes");
+const eventRoute = require("./src/event/event.routes");
 
 app.disable("x-powered-by");
 
@@ -38,6 +39,7 @@ app.use("/api/v1/orders", orderRoute);
 app.use("/api/v1/checkout", checkoutRoute);
 app.use("/api/v1/recipies", recipeRoute);
 app.use("/api/v1/feedback", feedbackRoute);
+app.use("/api/v1/event", eventRoute);
 
 
 app.use((err, req, res, next) => {
