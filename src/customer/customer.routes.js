@@ -9,6 +9,8 @@ const {
   getUserData,
   getUserWishList,
   removeWishlist,
+  getWeeklyPlan,
+  addWeeklyPlan,
 } = require("./customer.controller");
 const { getCart, addToCart, deleteFromCart } = require("./cart.controller");
 const { authenticateToken } = require("../common/jwt");
@@ -76,5 +78,9 @@ router.post(
   addToCart
 );
 router.delete("/:userId/cart", authenticateToken, deleteFromCart);
+
+router.get("/:userId/weekplan", authenticateToken, getWeeklyPlan);
+
+router.post("/:userId/weekplan", authenticateToken, addWeeklyPlan);
 
 module.exports = router;

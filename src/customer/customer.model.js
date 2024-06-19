@@ -94,6 +94,40 @@ const customerSchema = new Schema({
       },
     },
   ],
+
+  weekplan: {
+    type: [
+      {
+        day: {
+          type: String,
+          enum: [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday",
+          ],
+          required: true,
+        },
+        breakfast: [{ type: Schema.Types.ObjectId, ref: "meal" }],
+        lunch: [{ type: Schema.Types.ObjectId, ref: "meal" }],
+        dinner: [{ type: Schema.Types.ObjectId, ref: "meal" }],
+        snacks: [{ type: Schema.Types.ObjectId, ref: "meal" }],
+      },
+    ],
+    default: [
+      // Define default weekplan structure outside the object
+      { day: "monday", breakfast: [], lunch: [], dinner: [] },
+      { day: "tuesday", breakfast: [], lunch: [], dinner: [] },
+      { day: "wednesday", breakfast: [], lunch: [], dinner: [] },
+      { day: "thursday", breakfast: [], lunch: [], dinner: [] },
+      { day: "friday", breakfast: [], lunch: [], dinner: [] },
+      { day: "saturday", breakfast: [], lunch: [], dinner: [] },
+      { day: "sunday", breakfast: [], lunch: [], dinner: [] },
+    ],
+  },
 });
 
 module.exports = mongoose.model("Customer", customerSchema);
