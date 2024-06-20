@@ -3,21 +3,29 @@ const bcrypt = require("bcryptjs");
 const Seller = require("./seller.model");
 const logger = require("../common/logger");
 const { generateAccessToken } = require("../common/jwt");
+const CustomError = require("../errors/customerError");
+const {
+  AuthError,
+  UnprocessableEntity,
+  ServerError,
+  NotFoundError,
+} = require("../errors/error-types");
 
-exports.register = async (req, res) => {
+exports.register = async (req, res, next) => {
   const { name, email, password, SSN, phone, address } = req.body;
 
-  if (!(name && email && password && phone))
-    return res.status(400).send({ message: "missing data" });
-
-  const alreadyExists = await Seller.findOne({ email: email }).exec();
-  if (alreadyExists) {
-    return res.status(400).send({ message: "user already exists" });
-  }
-
   try {
+    if (!(name && email && password && phone))
+      throw new CustomError("missing data", UnprocessableEntity, 422);
+
+    const alreadyExists = await Seller.findOne({ email: email }).exec();
+    if (alreadyExists) {
+      throw new CustomError("seller already exists", AuthError, 409);
+    }
+
     const hashedPassword = await bcrypt.hash(password, 12);
-    if (!hashedPassword) throw Error("server error");
+    if (!hashedPassword)
+      throw new CustomError("Something went wrong", ServerError, 500);
     const seller = await Seller.create({
       name: name,
       email: email,
@@ -30,25 +38,22 @@ exports.register = async (req, res) => {
     await seller.save();
     const accessToken = generateAccessToken({ _id: seller._id });
 
-    logger.info("seller registerd successfully");
     res.status(201).send({
-      message: "seller registerd successfully",
+      message: "success",
       userId: seller._id,
       token: accessToken,
     });
-  } catch (e) {
-    logger.error(e);
-    res.status(500).send({ error: e.message });
+  } catch (err) {
+    next(err);
   }
 };
 
-exports.getSellerData = async (req, res) => {
+exports.getSellerData = async (req, res, next) => {
   try {
     const seller = await Seller.findById(req.params.sellerId);
     if (!seller) {
-      return res.status(404).json({ message: "Seller not found" });
+      throw new CustomError("Seller not found", NotFoundError, 404);
     }
-
     res.status(200).json({
       name: seller.name,
       email: seller.email,
@@ -56,7 +61,7 @@ exports.getSellerData = async (req, res) => {
       meals: seller.meals,
       products: seller.products,
     });
-  } catch (error) {
-    res.status(400).json({ error: error.message, seller: req.params.sellerId });
+  } catch (err) {
+    next(err);
   }
 };
