@@ -28,7 +28,6 @@ const mealSchema = new Schema({
   },
   category: { type: String, enum: categories, required: true },
   price: { type: Number, float: true, required: true },
-  tags: [String],
   ingredients: [String],
   reviews: [
     {

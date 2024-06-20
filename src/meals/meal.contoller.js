@@ -3,6 +3,8 @@ const Meal = require("./meal.model");
 
 const logger = require("../common/logger");
 const { transformMealToClientFormat } = require("../common/utils");
+const CustomError = require("../errors/customerError");
+const { NotFoundError, UnAuthorizedAccess } = require("../errors/error-types");
 
 exports.getAllMeals = async (req, res, next) => {
   try {
@@ -87,20 +89,19 @@ exports.updateMeal = async (req, res, next) => {
   try {
     const meal = await Meal.findById(req.params.mealId);
     if (!meal) {
-      res.status(404).json({ message: "Meal not found" });
-      return;
+      throw new CustomError("Meal not found", NotFoundError, 404);
     }
     if (req.user !== meal.seller.toString()) {
-      res.status(403).json({
-        message: "Unauthorized access: You are not the seller of this meal",
-      });
-      return;
+      throw new CustomError(
+        "You are not the seller of this meal",
+        UnAuthorizedAccess,
+        403
+      );
     }
 
     meal.title = req.body.title || meal.title;
     meal.description = req.body.description || meal.description;
     meal.price = req.body.price || meal.price;
-    meal.tags = req.body.tags || meal.tags;
     meal.images = req.body.images || meal.images;
 
     const updatedMeal = await meal.save();

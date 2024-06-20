@@ -8,7 +8,7 @@ exports.transformMealToClientFormat = (meal) => {
     title: meal.title,
     address: "cairo",
     description: meal.description,
-    tags: meal.tags,
+    tags: meal.tags || [],
     images: meal.images,
     ingredients: meal.ingredients,
     reviews: meal.reviews,
