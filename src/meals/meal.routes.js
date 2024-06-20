@@ -58,10 +58,17 @@ router.post(
 );
 
 // TODO: Update a review for a specific meal (Placeholder route)
-router.put("/:mealId/reviews", authenticateToken, ping);
+router.put(
+  "/:mealId/reviews/:reviewId",
+  authenticateToken,
+  reviewController.updateReview
+);
 
-// TODO: Delete a review for a specific meal (Placeholder route)
-router.delete("/:mealId/reviews", authenticateToken, ping);
+router.delete(
+  "/:mealId/reviews/:reviewId",
+  authenticateToken,
+  reviewController.deleteReview
+);
 
 // Meals Endpoints
 
