@@ -110,8 +110,7 @@ exports.updateMeal = async (req, res, next) => {
       id: updatedMeal._id,
     });
   } catch (err) {
-    if (!res.statusCode) res.status(400);
-    next(Error("Invalid data provided for updating meal"));
+    next(err);
   }
 };
 
