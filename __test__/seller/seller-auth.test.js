@@ -83,7 +83,7 @@ describe("getSellerData", () => {
       .send(testUser);
     expect(res.status).toBe(201);
     testUser.userId = res.body.userId;
-    testUser.token = res.body.accessToken;
+    testUser.token = res.body.token;
   });
   it("should handle non-existent user ID (404 Not Found)", async () => {
     const res = await request(app)

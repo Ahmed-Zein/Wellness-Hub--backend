@@ -124,9 +124,6 @@ router.post(
         `Minimum description length is ${MINIMUM_DESCRIPTION_LENGTH}`
       ),
     body("price").isFloat().withMessage("Price should be a valid number"),
-    body("tags")
-      .isArray({ min: MINIMUM_TAG_COUNT })
-      .withMessage(`You should enter at least ${MINIMUM_TAG_COUNT} tag`),
     body("category").isIn(categories).withMessage("Invalid meal type"),
   ],
   validationMiddleware,
