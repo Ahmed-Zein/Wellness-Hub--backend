@@ -38,7 +38,7 @@ afterAll(async () => {
   }
 });
 
-describe("Authentication:", () => {
+describe("weekplan", () => {
   beforeEach(async () => {
     const res = await request(app)
       .post("/api/v1/customer/register")

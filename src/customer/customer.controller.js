@@ -17,6 +17,7 @@ const {
   ServerError,
   NotFoundError,
   BadRequestError,
+  Conflict,
 } = require("../errors/error-types");
 const customerModel = require("./customer.model");
 
@@ -71,19 +72,19 @@ exports.getUserData = async (req, res, next) => {
   let customer;
   try {
     customer = await Customer.findById(req.params.userId);
-    if (!customer) throw Error("user id not found");
+    if (!customer) {
+      throw new CustomError("user id not found", NotFoundError, 404);
+    }
+    res.status(200).json({
+      name: customer.name,
+      email: customer.email,
+      phone: customer.phone,
+      address: customer.address || "",
+      following: customer.follows.length,
+    });
   } catch (err) {
-    logger.error(err);
-    res.status(404).json({ message: err.message }).end();
-    return;
+    next(err);
   }
-  res.json({
-    name: customer.name,
-    email: customer.email,
-    phone: customer.phone,
-    address: customer.address || "",
-    following: customer.follows.length,
-  });
 };
 
 exports.getUserWishList = [
@@ -109,26 +110,25 @@ exports.addToWishlist = async (req, res, next) => {
   let product;
   try {
     customer = await Customer.findById(userId);
-    if (!customer) throw Error("customer not found");
+    if (!customer)
+      throw new CustomError("customer not found", NotFoundError, 404);
 
     if (customer.wishlist.find((e) => e._id.toString() === productId)) {
       res.status(409);
-      throw Error("the item is already in the wishlist");
+      throw CustomError("the item is already in the wishlist", Conflict, 409);
     }
 
     product = await Product.findById(productId);
     if (!product) {
       product = await Meal.findById(productId);
-      if (!product) throw Error("item id not found");
+      if (!product)
+        throw new CustomError("item id not found", NotFoundError, 404);
     }
-
     customer.wishlist.push(product._id);
     customer.save();
     res.status(200).json({ message: "success" });
   } catch (err) {
-    if (!res.statusCode) res.status(404);
     next(err);
-    return;
   }
 };
 
@@ -139,7 +139,6 @@ exports.removeWishlist = async (req, res, next) => {
     customer = await Customer.findById(userId);
     if (!customer) throw Error("customer not found");
 
-    console.log(customer.wishlist);
     customer.wishlist = customer.wishlist.filter(
       (itemId) => itemId._id.toString() !== productId
     );

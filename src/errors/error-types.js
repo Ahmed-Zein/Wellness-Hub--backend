@@ -9,3 +9,5 @@ ErrorTypes.UnAuthorizedAccess = "unauthorized access Error";
 ErrorTypes.NotFoundError = "Not found Error";
 
 ErrorTypes.BadRequestError = "Bad Request";
+
+ErrorTypes.Conflict = "Confilct";
