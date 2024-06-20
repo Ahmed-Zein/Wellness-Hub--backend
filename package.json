@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": " NODE_ENV=test jest",
-    "gg": "jest --clearCache",
+    "coverage": " NODE_ENV=test jest --coverage",
     "start": "NODE_ENV=dev nodemon app.js",
     "prod": "NODE_ENV=dev node app.js"
   },
@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
+    "jest-junit": "^16.0.0",
     "nodemon": "^3.0.3",
     "supertest": "^6.3.4"
   }
