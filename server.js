@@ -1,6 +1,14 @@
 const express = require("express");
 const morgan = require("morgan");
+const rateLimit = require("express-rate-limit");
+
 const app = express();
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  standardHeaders: "draft-7", 
+  legacyHeaders: false,
+});
 
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -21,11 +29,13 @@ app.disable("x-powered-by");
 app.use(cors());
 app.use(morgan("dev"));
 app.use(bodyParser.json());
+app.use(limiter);
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/helloworld", (req, res) => {
   res.send("<h1>Hello World!!</h1>");
 });
+
 app.get("/", (req, res) => {
   res.send("<h1>WellnessHub</h1>");
 });
