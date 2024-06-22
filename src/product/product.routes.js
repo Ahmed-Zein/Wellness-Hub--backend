@@ -131,9 +131,9 @@ router.post("/:productId/rate", authenticateToken, async (req, res) => {
   }
 });
 // GET /products/:productId/reviews: endpoint to  Get a list of specific product reviews.
-router.get("//products/:productId/reviews", async (req, res) => {
+router.get("/:productId/reviews", async (req, res) => {
   try {
-    const products = await Product.find();
+    const product = await Product.findById(req.params.productId);
     res.status(200).json(product.reviews);
     console.log("Get is done");
   } catch (error) {
