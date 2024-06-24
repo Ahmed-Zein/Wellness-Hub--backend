@@ -7,6 +7,7 @@
     "test": " NODE_ENV=test jest",
     "coverage": " NODE_ENV=test jest --coverage",
     "start": "NODE_ENV=dev nodemon app.js",
+    "ddos": "NODE_ENV=dev node demo/ddos.js",
     "prod": "NODE_ENV=dev node app.js"
   },
   "keywords": [],

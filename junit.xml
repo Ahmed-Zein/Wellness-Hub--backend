@@ -1,49 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="19" failures="0" errors="0" time="3.951">
-  <testsuite name="weekplan" errors="0" failures="0" skipped="0" timestamp="2024-06-20T16:47:02" time="1.869" tests="2">
-    <testcase classname="weekplan should fetch the user weekplan" name="weekplan should fetch the user weekplan" time="0.394">
+<testsuites name="jest tests" tests="24" failures="0" errors="0" time="7.136">
+  <testsuite name="weekplan" errors="0" failures="0" skipped="0" timestamp="2024-06-23T23:58:35" time="3.642" tests="2">
+    <testcase classname="weekplan should fetch the user weekplan" name="weekplan should fetch the user weekplan" time="0.735">
     </testcase>
-    <testcase classname="weekplan should add to the user weekplan" name="weekplan should add to the user weekplan" time="0.295">
-    </testcase>
-  </testsuite>
-  <testsuite name="getUserData" errors="0" failures="0" skipped="0" timestamp="2024-06-20T16:47:02" time="2.458" tests="4">
-    <testcase classname="getUserData should handle non-existent user ID (404 Not Found)" name="getUserData should handle non-existent user ID (404 Not Found)" time="0.395">
-    </testcase>
-    <testcase classname="getUserData should return user data for a valid user ID" name="getUserData should return user data for a valid user ID" time="0.292">
-    </testcase>
-    <testcase classname="addToWishList should handle non-existent user ID (404 Not Found)" name="addToWishList should handle non-existent user ID (404 Not Found)" time="0.309">
-    </testcase>
-    <testcase classname="addToWishList should handle non-existent product ID (404 Not Found)" name="addToWishList should handle non-existent product ID (404 Not Found)" time="0.287">
+    <testcase classname="weekplan should add to the user weekplan" name="weekplan should add to the user weekplan" time="0.505">
     </testcase>
   </testsuite>
-  <testsuite name="JWT:" errors="0" failures="0" skipped="0" timestamp="2024-06-20T16:47:02" time="3.276" tests="6">
-    <testcase classname="JWT: should create new jwt" name="JWT: should create new jwt" time="0.026">
+  <testsuite name="getUserData" errors="0" failures="0" skipped="0" timestamp="2024-06-23T23:58:35" time="4.575" tests="4">
+    <testcase classname="getUserData should handle non-existent user ID (404 Not Found)" name="getUserData should handle non-existent user ID (404 Not Found)" time="0.671">
     </testcase>
-    <testcase classname="Authentication: should fail due to registering with existing email" name="Authentication: should fail due to registering with existing email" time="0.359">
+    <testcase classname="getUserData should return user data for a valid user ID" name="getUserData should return user data for a valid user ID" time="0.476">
     </testcase>
-    <testcase classname="Authentication: should fail registering with missing data" name="Authentication: should fail registering with missing data" time="0.315">
+    <testcase classname="addToWishList should handle non-existent user ID (404 Not Found)" name="addToWishList should handle non-existent user ID (404 Not Found)" time="0.482">
     </testcase>
-    <testcase classname="Authentication: should log-in customers" name="Authentication: should log-in customers" time="0.583">
-    </testcase>
-    <testcase classname="Authentication: should fail due to wrong password" name="Authentication: should fail due to wrong password" time="0.572">
-    </testcase>
-    <testcase classname="Authentication: should fail due to unregisterd email" name="Authentication: should fail due to unregisterd email" time="0.281">
+    <testcase classname="addToWishList should handle non-existent product ID (404 Not Found)" name="addToWishList should handle non-existent product ID (404 Not Found)" time="0.457">
     </testcase>
   </testsuite>
-  <testsuite name="Authentication:" errors="0" failures="0" skipped="0" timestamp="2024-06-20T16:47:02" time="3.783" tests="7">
-    <testcase classname="Authentication: should fail due to registering with existing email" name="Authentication: should fail due to registering with existing email" time="0.357">
+  <testsuite name="addMeal" errors="0" failures="0" skipped="0" timestamp="2024-06-23T23:58:35" time="5.148" tests="5">
+    <testcase classname="addMeal should add a meal" name="addMeal should add a meal" time="0.714">
     </testcase>
-    <testcase classname="Authentication: should fail registering with missing data" name="Authentication: should fail registering with missing data" time="0.309">
+    <testcase classname="addMeal should fail due to wrong seller id in the meal body" name="addMeal should fail due to wrong seller id in the meal body" time="0.47">
     </testcase>
-    <testcase classname="Authentication: should log-in sellers" name="Authentication: should log-in sellers" time="0.594">
+    <testcase classname="getAllMeals should get all meals" name="getAllMeals should get all meals" time="0.516">
     </testcase>
-    <testcase classname="Authentication: should fail due to wrong password" name="Authentication: should fail due to wrong password" time="0.554">
+    <testcase classname="getOneMeal should get a meals" name="getOneMeal should get a meals" time="0.542">
     </testcase>
-    <testcase classname="Authentication: should fail due to unregisterd email" name="Authentication: should fail due to unregisterd email" time="0.272">
+    <testcase classname="getOneMeal should fail due to wrong mealid" name="getOneMeal should fail due to wrong mealid" time="0.458">
     </testcase>
-    <testcase classname="getSellerData should handle non-existent user ID (404 Not Found)" name="getSellerData should handle non-existent user ID (404 Not Found)" time="0.291">
+  </testsuite>
+  <testsuite name="JWT:" errors="0" failures="0" skipped="0" timestamp="2024-06-23T23:58:35" time="5.872" tests="6">
+    <testcase classname="JWT: should create new jwt" name="JWT: should create new jwt" time="0.039">
     </testcase>
-    <testcase classname="getSellerData should return user data for a valid user ID" name="getSellerData should return user data for a valid user ID" time="0.27">
+    <testcase classname="Authentication: should fail due to registering with existing email" name="Authentication: should fail due to registering with existing email" time="0.568">
+    </testcase>
+    <testcase classname="Authentication: should fail registering with missing data" name="Authentication: should fail registering with missing data" time="0.461">
+    </testcase>
+    <testcase classname="Authentication: should log-in customers" name="Authentication: should log-in customers" time="0.903">
+    </testcase>
+    <testcase classname="Authentication: should fail due to wrong password" name="Authentication: should fail due to wrong password" time="0.941">
+    </testcase>
+    <testcase classname="Authentication: should fail due to unregisterd email" name="Authentication: should fail due to unregisterd email" time="0.461">
+    </testcase>
+  </testsuite>
+  <testsuite name="Authentication:" errors="0" failures="0" skipped="0" timestamp="2024-06-23T23:58:35" time="6.852" tests="7">
+    <testcase classname="Authentication: should fail due to registering with existing email" name="Authentication: should fail due to registering with existing email" time="0.675">
+    </testcase>
+    <testcase classname="Authentication: should fail registering with missing data" name="Authentication: should fail registering with missing data" time="0.473">
+    </testcase>
+    <testcase classname="Authentication: should log-in sellers" name="Authentication: should log-in sellers" time="0.957">
+    </testcase>
+    <testcase classname="Authentication: should fail due to wrong password" name="Authentication: should fail due to wrong password" time="0.941">
+    </testcase>
+    <testcase classname="Authentication: should fail due to unregisterd email" name="Authentication: should fail due to unregisterd email" time="0.446">
+    </testcase>
+    <testcase classname="getSellerData should handle non-existent user ID (404 Not Found)" name="getSellerData should handle non-existent user ID (404 Not Found)" time="0.451">
+    </testcase>
+    <testcase classname="getSellerData should return user data for a valid user ID" name="getSellerData should return user data for a valid user ID" time="0.447">
     </testcase>
   </testsuite>
 </testsuites>

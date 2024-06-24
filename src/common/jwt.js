@@ -6,7 +6,6 @@ const logger = require("./logger");
 const TOKEN_SECRET = config.get("TOKEN_SECRET");
 
 exports.generateAccessToken = (payload, expiresIn) => {
-
   if (!TOKEN_SECRET) {
     throw Error("Empty key");
   }

@@ -9,6 +9,6 @@ module.exports = {
     "!**/node_modules/**",
     "!**/vendor/**",
   ],
-  coverageReporters: ["text", "cobertura"],
-  reporters: ["default", "jest-junit"],
+  // coverageReporters: ["text", "cobertura"],
+  // reporters: ["default", "jest-junit"],
 };
