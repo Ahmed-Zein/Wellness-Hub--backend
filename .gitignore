@@ -131,3 +131,6 @@ dist
 
 # greybeast defines:
 *temp*
+
+.ipynb_checkpoints
+.vscode
